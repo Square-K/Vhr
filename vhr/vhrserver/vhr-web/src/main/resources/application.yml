@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    username: bdm711633128
+    password: Ql123321
+    url: jdbc:mysql://bdm711633128.my3w.com:3306/bdm711633128_db?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false
+  rabbitmq:
+    #seiryo
+    username: seiryo
+    #Ql123321
+    password: Ql123321
+    #59.110.23.212
+    host: 59.110.23.212
+    publisher-confirms: true
+    publisher-returns: true
+  redis:
+    host: 59.110.23.212
+    database: 0
+    port: 6379
+    password: 123
+  cache:
+    cache-names: menus_cache
+server:
+  port: 8081
+  compression:
+    enabled: true
+fastdfs:
+  nginx:
+    host: http://192.168.91.128/
