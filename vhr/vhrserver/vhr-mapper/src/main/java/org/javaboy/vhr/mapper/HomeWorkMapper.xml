@@ -9,17 +9,56 @@
         <result column="lessonName" property="lessonName" jdbcType="VARCHAR"/>
         <result column="section" property="section" jdbcType="VARCHAR"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
-        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
         <result column="leOrder" property="leOrder" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        day,lessonName,section,name,status
+        id,epNum,day,lessonName,section,name,status,leOrder
     </sql>
+    <insert id="addHomeWorks">
+        insert into homework (epNum,day,lessonName,section,name,status,leOrder)
+        values
+        <foreach collection="list" separator="," item="h">
+            (#{h.epNum, jdbcType=INTEGER},#{h.day, jdbcType=DATE},#{h.lessonName, jdbcType=VARCHAR},
+            #{h.section, jdbcType=VARCHAR},#{h.name, jdbcType=VARCHAR},#{h.status, jdbcType=VARCHAR},
+            #{h.leOrder, jdbcType=INTEGER})
+        </foreach>
+
+    </insert>
+    <update id="updateHomework" parameterType="org.javaboy.vhr.model.HomeWork">
+        update homework
+        set
+        <if test="epNum != null">epNum = #{epNum, jdbcType=INTEGER},</if>
+        <if test="day != null">day = #{day, jdbcType=DATE},</if>
+        <if test="lessonName != null">lessonName = #{lessonName, jdbcType=VARCHAR},</if>
+        <if test="section != null">section = #{section, jdbcType=VARCHAR},</if>
+        <if test="name != null">name = #{name, jdbcType=VARCHAR},</if>
+        <if test="status != null">status = #{status, jdbcType=VARCHAR},</if>
+        <if test="leOrder != null">leOrder = #{leOrder, jdbcType=INTEGER}</if>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <delete id="deleteHomeWorks" parameterType="java.lang.Integer">
+        delete from homework
+        where id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
     <select id="getHomeWorksByEpNum" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
         from homework
         where epNum = #{epNum,jdbcType=INTEGER}
+    </select>
+    <select id="getMinEpNum" resultType="java.lang.Integer">
+        select epNum from homework group by epNum order by epNum asc limit 1
+    </select>
+    <select id="getAllEpNums" resultType="java.lang.Integer">
+        select epNum from homework group by epNum order by epNum asc
+    </select>
+    <select id="getLessonNames" resultType="java.lang.String">
+        select lessonName from homework group by lessonName
     </select>
 </mapper>

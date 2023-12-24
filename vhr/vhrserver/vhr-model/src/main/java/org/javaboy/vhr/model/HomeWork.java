@@ -1,6 +1,7 @@
 package org.javaboy.vhr.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -19,7 +20,8 @@ public class HomeWork implements Serializable {
     //期数
     private Integer epNum;
     //日期
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "Asia/Shanghai")
+//    @DateTimeFormat(pattern = "yyyy-MM-dd")
+   @JsonFormat(pattern = "yyyy-MM-dd",timezone = "Asia/Shanghai")
     private Date day;
     //课程名
     private String lessonName;
@@ -28,14 +30,14 @@ public class HomeWork implements Serializable {
     //姓名
     private String name;
     //状态
-    private Integer status;
+    private String status;
     //课程顺序
     private Integer leOrder;
 
     public HomeWork() {
     }
 
-    public HomeWork(Integer id, Integer epNum, Date day, String lessonName, String section, String name, Integer status, Integer leOrder) {
+    public HomeWork(Integer id, Integer epNum, Date day, String lessonName, String section, String name, String status, Integer leOrder) {
         this.id = id;
         this.epNum = epNum;
         this.day = day;
@@ -94,11 +96,11 @@ public class HomeWork implements Serializable {
         this.name = name;
     }
 
-    public Integer getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -108,5 +110,19 @@ public class HomeWork implements Serializable {
 
     public void setLeOrder(Integer leOrder) {
         this.leOrder = leOrder;
+    }
+
+    @Override
+    public String toString() {
+        return "HomeWork{" +
+                "id=" + id +
+                ", epNum=" + epNum +
+                ", day=" + day +
+                ", lessonName='" + lessonName + '\'' +
+                ", section='" + section + '\'' +
+                ", name='" + name + '\'' +
+                ", status=" + status +
+                ", leOrder=" + leOrder +
+                '}';
     }
 }

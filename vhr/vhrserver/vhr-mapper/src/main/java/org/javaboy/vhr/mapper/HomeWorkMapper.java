@@ -1,6 +1,7 @@
 package org.javaboy.vhr.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.javaboy.vhr.model.HomeWork;
 
 import java.util.List;
@@ -19,4 +20,20 @@ public interface HomeWorkMapper {
      */
     List<HomeWork> getHomeWorksByEpNum(Integer epNum);
 
+    Integer getMinEpNum();
+
+    List<Integer> getAllEpNums();
+
+    /**
+     * 获取所有课程名
+     * @return
+     */
+    public List<String> getLessonNames();
+
+    //根据id更新homework数据
+    public boolean updateHomework(HomeWork h);
+
+    public void deleteHomeWorks(Integer[] ids);
+
+    Integer addHomeWorks(@Param("list") List<HomeWork> list);
 }
