@@ -27,7 +27,7 @@
               style="display: inline-flex;margin-right: 8px"
               action="/employee/basic/import">
             <el-button :disabled="importDataDisabled" type="success" :icon="importDataBtnIcon">
-              {{importDataBtnText}}
+              {{ importDataBtnText }}
             </el-button>
           </el-upload>
           <el-button type="success" @click="exportData" icon="el-icon-download">
@@ -79,94 +79,35 @@
             width="85">
         </el-table-column>
         <el-table-column
-            prop="speciality"
-            width="85"
-            align="left"
-            label="专业">
-        </el-table-column>
-        <el-table-column
-            prop="education"
-            width="85"
-            align="left"
-            label="学历">
-        </el-table-column>
-        <el-table-column
-            prop="graduateDate"
-            width="120"
-            align="left"
-            label="毕业时间">
-        </el-table-column>
-        <el-table-column
-            prop="idCard"
-            width="120"
-            align="left"
-            label="身份证号">
-        </el-table-column>
-        <el-table-column
-            prop="phone"
-            width="120"
-            align="left"
-            label="手机号码">
-        </el-table-column>
-        <el-table-column
-            prop="weChat"
-            width="120"
-            align="left"
-            label="微信号码">
-        </el-table-column>
-        <el-table-column
             prop="Japanese"
             width="85"
             align="left"
             label="日语等级">
         </el-table-column>
         <el-table-column
-            prop="notes"
+            prop="age"
             width="120"
             align="left"
-            label="备注信息">
+            label="年龄">
         </el-table-column>
         <el-table-column
-            prop="test_time1"
+            prop="interviewStatus"
             width="120"
             align="left"
-            label="笔试时间">
+            label="签约情况"
+            :formatter="formatInterviewStatus">
         </el-table-column>
         <el-table-column
-            prop="result1"
+            prop="salary"
             width="85"
             align="left"
-            label="笔试结果">
+            label="薪资">
         </el-table-column>
         <el-table-column
-            prop="test_time2"
+            prop="averageScore"
             width="85"
             align="left"
-            label="面试时间">
-        </el-table-column>
-        <el-table-column
-            prop="result2"
-            width="85"
-            align="left"
-            label="面试结果">
-        </el-table-column>
-        <el-table-column
-            prop="offer"
-            width="85"
-            align="left"
-            label="接受offer">
-        </el-table-column>
-        <el-table-column
-            prop="agreement"
-            width="85"
-            align="left"
-            label="协议签订">
-        </el-table-column>
-        <el-table-column
-            prop="beginDate"
-            width="120"
-            align="left"
-            label="开班时间">
+            label="考试平均分">
         </el-table-column>
       </el-table>
       <div style="display: flex;justify-content: flex-end">
@@ -316,236 +257,249 @@
 </template>
 
 <script>
-    export default {
-        name: "PerAdv",
-        data() {
-            return {
-                searchValue: {
-                  politicId: null,
-                  nationId: null,
-                  jobLevelId: null,
-                  posId: null,
-                  engageForm: null,
-                  departmentId: null,
-                  beginDateScope: null
-                },
-                title: '',
-                importDataBtnText: '导入数据',
-                importDataBtnIcon: 'el-icon-upload2',
-                importDataDisabled: false,
-                showAdvanceSearchView: false,
-                allDeps: [],
-                emps: [],
-                loading: false,
-                popVisible: false,
-                popVisible2: false,
-                dialogVisible: false,
-                total: 0,
-                page: 1,
-                keyword: '',
-                size: 10,
-                nations: [],
-                emp: {
-                  name: "张三",
-                  gender: "男",
-                  school: "某某大学",
-                  speciality: "日语专业",
-                  education: "本科",
-                  graduateDate: "20230701",
-                  idCard: "123123311231312412",
-                  phone: "12312312311",
-                  weChat: "123123",
-                  Japanese: "N1",
-                  notes: "我是备注",
-                  test_time1: "20230609",
-                  result1: "V",
-                  test_time2: "20230612",
-                  result2: "V",
-                  offer: "V",
-                  agreement: "V",
-                  beginDate: "20231107"
-                },
-                defaultProps: {
-                  children: 'children',
-                  label: 'name'
-                },
-                rules: {
-                  name: [{required: true, message: '请输入用户名', trigger: 'blur'}],
-                  gender: [{required: true, message: '请输入性别', trigger: 'blur'}],
-                  school: [{required: true, message: '请输入学校', trigger: 'blur'}],
-                  speciality: [{required: true, message: '请输入学校', trigger: 'blur'}],
-                  education: [{required: true, message: '请输入学历', trigger: 'blur'}],
-                  graduateDate: [{required: true, message: '请输入毕业时间', trigger: 'blur'}],
-                  idCard: [{required: true, message: '请输入专业', trigger: 'blur'}, {
-                    pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/,
-                    message: '身份证号码格式不正确',
-                    trigger: 'blur'
-                  }],
-                  phone: [{required: true, message: '请输入联系电话', trigger: 'blur'}],
-                  weChat: [{required: true, message: '请输入微信号', trigger: 'blur'}],
-                  Japanese: [{required: true, message: '请输入日语等级', trigger: 'blur'}],
-                  notes: [{required: true, message: '请输入备注', trigger: 'blur'}],
-                  test_time1: [{required: true, message: '请输入笔试时间', trigger: 'blur'}],
-                  result1: [{required: true, message: '请输入笔试结果', trigger: 'blur'}],
-                  test_time2: [{required: true, message: '请输入面试时间', trigger: 'blur'}],
-                  result2: [{required: true, message: '请输入面试结果', trigger: 'blur'}],
-                  offer: [{required: true, message: '是否接受了offer', trigger: 'blur'}],
-                  agreement: [{required: true, message: '是否签订了协议', trigger: 'blur'}],
-                  beginDate: [{required: true, message: '请输入开班时间', trigger: 'blur'}],
-                }
-            }
-        },
-        mounted() {
-          this.initEmps();
-          this.initData();
-        },
-        methods: {
-            searvhViewHandleNodeClick(data) {
-              this.inputDepName = data.name;
-              this.searchValue.departmentId = data.id;
-              this.popVisible2 = !this.popVisible2
-            },
-            onError(err, file, fileList) {
-              this.importDataBtnText = '导入数据';
-              this.importDataBtnIcon = 'el-icon-upload2';
-              this.importDataDisabled = false;
-            },
-            onSuccess(response, file, fileList) {
-              this.importDataBtnText = '导入数据';
-              this.importDataBtnIcon = 'el-icon-upload2';
-              this.importDataDisabled = false;
-              this.initEmps();
-            },
-            beforeUpload() {
-              this.importDataBtnText = '正在导入';
-              this.importDataBtnIcon = 'el-icon-loading';
-              this.importDataDisabled = true;
-            },
-            exportData() {
-              window.open('/employee/basic/export', '_parent');
-            },
-            emptyEmp() {
-                this.emp = {
-                  name: "",
-                  gender: "",
-                  school: "",
-                  speciality: "",
-                  education: "",
-                  graduateDate: "",
-                  idCard: "",
-                  phone: "",
-                  weChat: "",
-                  Japanese: "",
-                  notes: "",
-                  test_time1: "",
-                  result1: "",
-                  test_time2: "",
-                  result2: "",
-                  offer: "",
-                  agreement: "",
-                  beginDate: ""
-                }
-            },
-            showEditEmpView(data) {
-                this.initPositions();
-                this.title = '编辑员工信息';
-                this.emp = data;
-                this.inputDepName = data.department.name;
-                this.dialogVisible = true;
-            },
-            deleteEmp(data) {
-                this.$confirm('此操作将永久删除【' + data.name + '】, 是否继续?', '提示', {
-                  confirmButtonText: '确定',
-                  cancelButtonText: '取消',
-                  type: 'warning'
-                }).then(() => {
-                    this.deleteRequest("/employee/basic/" + data.id).then(resp => {
-                        if (resp) {
-                          this.initEmps();
-                        }
-                    })
-                }).catch(() => {
-                    this.$message({
-                      type: 'info',
-                      message: '已取消删除'
-                    });
-                });
-            },
-            doAddEmp() {
-                if (this.emp.id) {
-                    this.$refs['empForm'].validate(valid => {
-                        if (valid) {
-                            this.putRequest("/employee/basic/", this.emp).then(resp => {
-                                if (resp) {
-                                  this.dialogVisible = false;
-                                  this.initEmps();
-                                }
-                            })
-                        }
-                    });
-                } else {
-                    this.$refs['empForm'].validate(valid => {
-                        if (valid) {
-                            this.postRequest("/employee/basic/", this.emp).then(resp => {
-                                if (resp) {
-                                    this.dialogVisible = false;
-                                    this.initEmps();
-                                }
-                            })
-                        }
-                    });
-                }
-            },
-
-            initData() {
-
-            },
-            sizeChange(currentSize) {
-              this.size = currentSize;
-              this.initEmps();
-            },
-            currentChange(currentPage) {
-              this.page = currentPage;
-              this.initEmps();
-            },
-            showAddEmpView() {
-              this.emptyEmp();
-              this.title = '添加员工';
-              this.dialogVisible = true;
-            },
-            initEmps() {
-              this.loading = true;
-              let url = '/employee/basic/?page=' + this.page + '&size=' + this.size;
-              url += "&name=" + this.keyword;
-                this.getRequest(url).then(resp => {
-                  this.loading = false;
-                    if (resp) {
-                      this.emps = resp.data;
-                      this.total = resp.total;
-                    }
-                });
-            }
-        }
+export default {
+  name: "PerAdv",
+  data() {
+    return {
+      searchValue: {
+        politicId: null,
+        nationId: null,
+        jobLevelId: null,
+        posId: null,
+        engageForm: null,
+        departmentId: null,
+        beginDateScope: null
+      },
+      title: '',
+      importDataBtnText: '导入数据',
+      importDataBtnIcon: 'el-icon-upload2',
+      importDataDisabled: false,
+      showAdvanceSearchView: false,
+      allDeps: [],
+      emps: [],
+      loading: false,
+      popVisible: false,
+      popVisible2: false,
+      dialogVisible: false,
+      total: 0,
+      page: 1,
+      keyword: null,
+      size: 10,
+      nations: [],
+      emp: {
+        name: "张三",
+        gender: "男",
+        school: "某某大学",
+        speciality: "日语专业",
+        education: "本科",
+        graduateDate: "20230701",
+        idCard: "123123311231312412",
+        phone: "12312312311",
+        weChat: "123123",
+        Japanese: "N1",
+        notes: "我是备注",
+        test_time1: "20230609",
+        result1: "V",
+        test_time2: "20230612",
+        result2: "V",
+        offer: "V",
+        agreement: "V",
+        beginDate: "20231107"
+      },
+      defaultProps: {
+        children: 'children',
+        label: 'name'
+      },
+      rules: {
+        name: [{required: true, message: '请输入用户名', trigger: 'blur'}],
+        gender: [{required: true, message: '请输入性别', trigger: 'blur'}],
+        school: [{required: true, message: '请输入学校', trigger: 'blur'}],
+        speciality: [{required: true, message: '请输入学校', trigger: 'blur'}],
+        education: [{required: true, message: '请输入学历', trigger: 'blur'}],
+        graduateDate: [{required: true, message: '请输入毕业时间', trigger: 'blur'}],
+        idCard: [{required: true, message: '请输入专业', trigger: 'blur'}, {
+          pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/,
+          message: '身份证号码格式不正确',
+          trigger: 'blur'
+        }],
+        phone: [{required: true, message: '请输入联系电话', trigger: 'blur'}],
+        weChat: [{required: true, message: '请输入微信号', trigger: 'blur'}],
+        Japanese: [{required: true, message: '请输入日语等级', trigger: 'blur'}],
+        notes: [{required: true, message: '请输入备注', trigger: 'blur'}],
+        test_time1: [{required: true, message: '请输入笔试时间', trigger: 'blur'}],
+        result1: [{required: true, message: '请输入笔试结果', trigger: 'blur'}],
+        test_time2: [{required: true, message: '请输入面试时间', trigger: 'blur'}],
+        result2: [{required: true, message: '请输入面试结果', trigger: 'blur'}],
+        offer: [{required: true, message: '是否接受了offer', trigger: 'blur'}],
+        agreement: [{required: true, message: '是否签订了协议', trigger: 'blur'}],
+        beginDate: [{required: true, message: '请输入开班时间', trigger: 'blur'}],
+      }
     }
+  },
+  mounted() {
+    this.initEmps();
+    this.initData();
+  },
+  methods: {
+    formatInterviewStatus(row, column, value) {
+      if (value == 0) {
+        return "面试中"
+      } else if (value == 1) {
+        return "面试通过"
+      } else if (value == 2) {
+        return "面试完成"
+      }
+    },
+    searvhViewHandleNodeClick(data) {
+      this.inputDepName = data.name;
+      this.searchValue.departmentId = data.id;
+      this.popVisible2 = !this.popVisible2
+    },
+    onError(err, file, fileList) {
+      this.importDataBtnText = '导入数据';
+      this.importDataBtnIcon = 'el-icon-upload2';
+      this.importDataDisabled = false;
+    },
+    onSuccess(response, file, fileList) {
+      this.importDataBtnText = '导入数据';
+      this.importDataBtnIcon = 'el-icon-upload2';
+      this.importDataDisabled = false;
+      this.initEmps();
+    },
+    beforeUpload() {
+      this.importDataBtnText = '正在导入';
+      this.importDataBtnIcon = 'el-icon-loading';
+      this.importDataDisabled = true;
+    },
+    exportData() {
+      window.open('/employee/basic/export', '_parent');
+    },
+    emptyEmp() {
+      this.emp = {
+        name: "",
+        gender: "",
+        school: "",
+        speciality: "",
+        education: "",
+        graduateDate: "",
+        idCard: "",
+        phone: "",
+        weChat: "",
+        Japanese: "",
+        notes: "",
+        test_time1: "",
+        result1: "",
+        test_time2: "",
+        result2: "",
+        offer: "",
+        agreement: "",
+        beginDate: ""
+      }
+    },
+    showEditEmpView(data) {
+      this.initPositions();
+      this.title = '编辑员工信息';
+      this.emp = data;
+      this.inputDepName = data.department.name;
+      this.dialogVisible = true;
+    },
+    deleteEmp(data) {
+      this.$confirm('此操作将永久删除【' + data.name + '】, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.deleteRequest("/employee/basic/" + data.id).then(resp => {
+          if (resp) {
+            this.initEmps();
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    },
+    doAddEmp() {
+      if (this.emp.id) {
+        this.$refs['empForm'].validate(valid => {
+          if (valid) {
+            this.putRequest("/employee/basic/", this.emp).then(resp => {
+              if (resp) {
+                this.dialogVisible = false;
+                this.initEmps();
+              }
+            })
+          }
+        });
+      } else {
+        this.$refs['empForm'].validate(valid => {
+          if (valid) {
+            this.postRequest("/employee/basic/", this.emp).then(resp => {
+              if (resp) {
+                this.dialogVisible = false;
+                this.initEmps();
+              }
+            })
+          }
+        });
+      }
+    },
+
+    initData() {
+
+    },
+    sizeChange(currentSize) {
+      this.size = currentSize;
+      this.initEmps();
+    },
+    currentChange(currentPage) {
+      this.page = currentPage;
+      this.initEmps();
+    },
+    showAddEmpView() {
+      this.emptyEmp();
+      this.title = '添加员工';
+      this.dialogVisible = true;
+    },
+    initEmps() {
+      this.loading = true;
+      let url = '/employeem/search';
+      if (this.keyword == null || this.keyword === "") {
+        this.getRequest(url).then(resp => {
+          this.loading = false;
+          this.emps = resp.result;
+        });
+      } else {
+        this.getRequest(url, {name: this.keyword}).then(resp => {
+          this.loading = false;
+          this.emps = resp.result;
+        });
+      }
+
+    }
+  }
+}
 </script>
 
 <style scoped>
 
-    /* 可以设置不同的进入和离开动画 */
-    /* 设置持续时间和动画函数 */
-    .slide-fade-enter-active {
-      transition: all .8s ease;
-    }
+/* 可以设置不同的进入和离开动画 */
+/* 设置持续时间和动画函数 */
+.slide-fade-enter-active {
+  transition: all .8s ease;
+}
 
-    .slide-fade-leave-active {
-      transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-    }
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
 
-    .slide-fade-enter, .slide-fade-leave-to
-      /* .slide-fade-leave-active for below version 2.1.8 */
-    {
-      transform: translateX(10px);
-      opacity: 0;
-    }
+.slide-fade-enter, .slide-fade-leave-to
+  /* .slide-fade-leave-active for below version 2.1.8 */
+{
+  transform: translateX(10px);
+  opacity: 0;
+}
 
 </style>
