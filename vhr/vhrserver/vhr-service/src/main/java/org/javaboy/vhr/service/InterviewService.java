@@ -50,7 +50,7 @@ public class InterviewService {
     public Integer addEmp(Interview employee) {
         int result = interviewMapper.insertSelective(employee);
         if (result == 1) {
-            Interview emp = interviewMapper.getEmployeeById(employee.getId());
+            Interview emp = interviewMapper.getEmployeeByIdCard(employee.getIdCard());
             //生成消息的唯一id
             String msgId = UUID.randomUUID().toString();
             MailSendLog mailSendLog = new MailSendLog();
