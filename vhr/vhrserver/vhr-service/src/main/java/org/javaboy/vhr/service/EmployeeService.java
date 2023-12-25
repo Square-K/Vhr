@@ -19,4 +19,8 @@ public class EmployeeService {
         return employeeMapper.searchEmployee(name);
     }
 
+    public int deleteEmpByEid(Integer id) {
+        return employeeMapper.deleteEmpByEid(id);
+    }
+
 }

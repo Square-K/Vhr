@@ -1,5 +1,6 @@
 package org.javaboy.vhr.controller.emp;
 
+import org.javaboy.vhr.model.RespBean;
 import org.javaboy.vhr.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,14 @@ public class EmpController {
         }
 
         return resultMap;
+    }
+
+    @DeleteMapping("/{id}")
+    public RespBean deleteEmpByEid(@PathVariable Integer id) {
+        if (employeeService.deleteEmpByEid(id) == 1) {
+            return RespBean.ok("删除成功!");
+        }
+        return RespBean.error("删除失败!");
     }
 
 

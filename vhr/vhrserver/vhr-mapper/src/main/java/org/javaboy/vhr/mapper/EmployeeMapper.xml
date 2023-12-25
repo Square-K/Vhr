@@ -20,4 +20,9 @@
         </if>
     </select>
 
+    <!-- 删除员工 -->
+    <delete id="deleteEmpByEid">
+        DELETE FROM employee WHERE id = #{id}
+    </delete>
+
 </mapper>

@@ -36,6 +36,9 @@
           <el-button type="primary" icon="el-icon-plus" @click="showAddEmpView">
             添加用户
           </el-button>
+          <el-button type="primary" icon="el-icon-minus" @click="deleteEmp2">
+            删除用户
+          </el-button>
         </div>
       </div>
       <transition name="slide-fade">
@@ -54,6 +57,9 @@
           element-loading-text="正在加载..."
           element-loading-spinner="el-icon-loading"
           element-loading-background="rgba(0, 0, 0, 0.8)"
+
+          ref="empTable"
+          @selection-change="handleSelectionChange"
           style="width: 100%">
         <el-table-column
             type="selection"
@@ -270,6 +276,7 @@ export default {
         departmentId: null,
         beginDateScope: null
       },
+      selectedEmps: [],
       title: '',
       importDataBtnText: '导入数据',
       importDataBtnIcon: 'el-icon-upload2',
@@ -336,18 +343,20 @@ export default {
       }
     }
   },
+
   mounted() {
     this.initEmps();
     this.initData();
   },
   methods: {
+    handleSelectionChange(selection) {
+      this.selectedEmps = selection;
+    },
     formatInterviewStatus(row, column, value) {
       if (value == 0) {
-        return "面试中"
+        return "签约成功"
       } else if (value == 1) {
-        return "面试通过"
-      } else if (value == 2) {
-        return "面试完成"
+        return "签约失败"
       }
     },
     searvhViewHandleNodeClick(data) {
@@ -420,6 +429,44 @@ export default {
           message: '已取消删除'
         });
       });
+    },
+
+    deleteEmp2() {
+      if (this.selectedEmps.length === 0) {
+        alert('请选择至少一个用户进行删除');
+        return;
+      }
+
+      if (confirm('此操作将永久删除选中的用户, 是否继续?')) {
+        this.selectedEmps.forEach(emp => {
+          this.deleteRequest("/employeem/" + emp.id);
+        });
+        alert('用户已删除');
+        this.initEmps();
+      } else {
+        alert('已取消删除');
+      }
+      // if (this.selectedEmps.length === 0) {
+      //   this.$message.warning('请选择至少一个用户进行删除');
+      //   return;
+      // }
+      // this.$confirm('此操作将永久删除选中的用户, 是否继续?', '提示', {
+      //   confirmButtonText: '确定',
+      //   cancelButtonText: '取消',
+      //   type: 'warning'
+      // }).then(() => {
+      //   this.selectedEmps.forEach(emp => {
+      //     // 这里替换为你的删除请求
+      //     this.deleteRequest("/employee/" + emp.id)
+      //   });
+      //   this.$message.success('用户已删除');
+      //   this.initEmps();
+      // }).catch(() => {
+      //   this.$message({
+      //     type: 'info',
+      //     message: '已取消删除'
+      //   });
+      // });
     },
     doAddEmp() {
       if (this.emp.id) {
