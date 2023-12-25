@@ -30,11 +30,14 @@
                             {{importDataBtnText}}
                         </el-button>
                     </el-upload>
-                    <el-button type="success" @click="exportData" icon="el-icon-download">
+                    <el-button type="success" icon="el-icon-download" @click="exportData">
                         导出数据
                     </el-button>
                     <el-button type="primary" icon="el-icon-plus" @click="showAddEmpView">
                         添加用户
+                    </el-button>
+                    <el-button type="danger" icon="el-icon-delete" @click="deleteEmp">
+                         删除用户
                     </el-button>
                 </div>
             </div>
@@ -144,6 +147,7 @@
                     element-loading-text="正在加载..."
                     element-loading-spinner="el-icon-loading"
                     element-loading-background="rgba(0, 0, 0, 0.8)"
+                    @selection-change="handleSelectionChange"
                     style="width: 100%">
                 <el-table-column
                         type="selection"
@@ -410,6 +414,7 @@
         name: "EmpBasic",
         data() {
             return {
+                selectedEmps: [],
                 searchValue: {
                     politicId: null,
                     nationId: null,
@@ -543,16 +548,21 @@
                 this.inputDepName = data.department.name;
                 this.dialogVisible = true;
             },
-            deleteEmp(data) {
-                this.$confirm('此操作将永久删除【' + data.name + '】, 是否继续?', '提示', {
+            handleSelectionChange(selection) {
+              this.selectedEmps = selection;
+            },
+            deleteEmp() {
+                this.$confirm('此操作将永久删除所选用户, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.deleteRequest("/employee/basic/" + data.id).then(resp => {
+                    this.selectedEmps.forEach(emp => {
+                      this.deleteRequest("/employee/basic/" + emp.id).then(resp => {
                         if (resp) {
-                            this.initEmps();
+                          this.initEmps();
                         }
+                      })
                     })
                 }).catch(() => {
                     this.$message({
@@ -562,29 +572,24 @@
                 });
             },
             doAddEmp() {
-                if (this.emp.id) {
+                    //触发表单验证
                     this.$refs['empForm'].validate(valid => {
                         if (valid) {
-                            this.putRequest("/employee/basic/", this.emp).then(resp => {
-                                if (resp) {
-                                    this.dialogVisible = false;
-                                    this.initEmps();
-                                }
-                            })
-                        }
-                    });
-                } else {
-                    this.$refs['empForm'].validate(valid => {
-                        if (valid) {
+                          //验证通过，数据传到后端
                             this.postRequest("/employee/basic/", this.emp).then(resp => {
                                 if (resp) {
+                                    this.$message({
+                                      message:resp.message,
+                                      type:'success'
+                                    })
+                                    //关闭对话框，刷新表格
                                     this.dialogVisible = false;
                                     this.initEmps();
                                 }
                             })
                         }
                     });
-                }
+
             },
             // handleNodeClick(data) {
             //     this.inputDepName = data.name;
