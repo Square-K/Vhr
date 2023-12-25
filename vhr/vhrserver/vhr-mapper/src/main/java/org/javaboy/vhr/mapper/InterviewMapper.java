@@ -30,6 +30,8 @@ public interface InterviewMapper {
 
     Interview getEmployeeById(Integer id);
 
+    Interview getEmployeeByIdCard(String idCard);
+
     List<Interview> getEmployeeByPageWithSalary(@Param("page") Integer page, @Param("size") Integer size);
 
     Integer updateEmployeeSalaryById(@Param("eid") Integer eid, @Param("sid") Integer sid);
