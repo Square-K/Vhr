@@ -205,7 +205,7 @@
                         label="微信号码">
                 </el-table-column>
                 <el-table-column
-                        prop="Japanese"
+                        prop="japanese"
                         width="85"
                         align="left"
                         label="日语等级">
@@ -337,9 +337,9 @@
                           </el-form-item>
                         </el-col>
                         <el-col :span="5">
-                            <el-form-item label="日语等级:" prop="Japanese">
+                            <el-form-item label="日语等级:" prop="japanese">
                               <el-input size="mini" style="width: 150px" prefix-icon="el-icon-edit"
-                                        v-model="emp.Japanese" placeholder="请输入日语等级"></el-input>
+                                        v-model="emp.japanese" placeholder="请输入日语等级"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
@@ -445,7 +445,7 @@
                   idCard: "123123311231312412",
                   phone: "12312312311",
                   weChat: "123123",
-                  Japanese: "N1",
+                  japanese: "N1",
                   notes: "我是备注",
                   test_time1: "20230609",
                   result1: "V",
@@ -473,7 +473,7 @@
                     }],
                     phone: [{required: true, message: '请输入联系电话', trigger: 'blur'}],
                     weChat: [{required: true, message: '请输入微信号', trigger: 'blur'}],
-                    Japanese: [{required: true, message: '请输入日语等级', trigger: 'blur'}],
+                    japanese: [{required: true, message: '请输入日语等级', trigger: 'blur'}],
                     notes: [{required: true, message: '请输入备注', trigger: 'blur'}],
                     test_time1: [{required: true, message: '请输入笔试时间', trigger: 'blur'}],
                     result1: [{required: true, message: '请输入笔试结果', trigger: 'blur'}],
@@ -525,7 +525,7 @@
                     idCard: "",
                     phone: "",
                     weChat: "",
-                    Japanese: "",
+                    japanese: "",
                     notes: "",
                     test_time1: "",
                     result1: "",

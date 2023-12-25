@@ -12,7 +12,7 @@
         <result column="idCard" property="idCard" jdbcType="VARCHAR"/>
         <result column="phone" property="phone" jdbcType="VARCHAR"/>
         <result column="weChat" property="weChat" jdbcType="VARCHAR"/>
-        <result column="Japanese" property="Japanese" jdbcType="VARCHAR"/>
+        <result column="japanese" property="japanese" jdbcType="VARCHAR"/>
         <result column="notes" property="notes" jdbcType="VARCHAR"/>
         <result column="test_time1" property="test_time1" jdbcType="DATE"/>
         <result column="result1" property="result1" jdbcType="VARCHAR"/>
@@ -24,7 +24,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, name, gender, school, speciality, education, graduateDate,idCard,phone,weChat,Japanese,notes,test_time1,result1,test_time2,result2,offer,agreement,beginDate
+        id, name, gender, school, speciality, education, graduateDate,idCard,phone,weChat,japanese,notes,test_time1,result1,test_time2,result2,offer,agreement,beginDate
     </sql>
 
     <select id="maxWorkID" resultType="java.lang.Integer">
@@ -72,7 +72,7 @@
 
     <insert id="addEmps">
         insert into interview (name, gender, school, speciality, education, graduateDate,
-                               idCard,phone,weChat,Japanese,notes,test_time1,result1,
+                               idCard,phone,weChat,japanese,notes,test_time1,result1,
                                test_time2,result2,offer,agreement,beginDate)
         values
         <foreach collection="list" separator="," item="emp">
@@ -81,7 +81,7 @@
             #{emp.graduateDate,jdbcType=DATE},
             #{emp.idCard,jdbcType=VARCHAR}, #{emp.phone,jdbcType=VARCHAR}, #{emp.email,jdbcType=VARCHAR},
             #{emp.phone,jdbcType=VARCHAR}, #{emp.address,jdbcType=VARCHAR}, #{emp.weChat,jdbcType=VARCHAR},
-            #{emp.Japanese,jdbcType=VARCHAR}, #{emp.notes,jdbcType=VARCHAR}, #{emp.test_time1,jdbcType=DATE},
+            #{emp.japanese,jdbcType=VARCHAR}, #{emp.notes,jdbcType=VARCHAR}, #{emp.test_time1,jdbcType=DATE},
             #{emp.result1,jdbcType=VARCHAR}, #{emp.test_time2,jdbcType=DATE}, #{emp.result2,jdbcType=VARCHAR},
             #{emp.offer,jdbcType=VARCHAR}, #{emp.agreement,jdbcType=VARCHAR}, #{emp.beginDate,jdbcType=DATE}
             )
@@ -89,14 +89,14 @@
     </insert>
     <insert id="insert" parameterType="org.javaboy.vhr.model.Interview">
         insert into interview (id,name, gender, school, speciality, education, graduateDate,
-                              idCard,phone,weChat,Japanese,notes,test_time1,result1,
+                              idCard,phone,weChat,japanese,notes,test_time1,result1,
                               test_time2,result2,offer,agreement,beginDate
           )
         values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{gender,jdbcType=CHAR},
                 #{school,jdbcType=VARCHAR}, #{speciality,jdbcType=VARCHAR}, #{education,jdbcType=VARCHAR},
                 #{graduateDate,jdbcType=DATE},
                 #{idCard,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},  #{weChat,jdbcType=VARCHAR},
-                #{Japanese,jdbcType=VARCHAR}, #{notes,jdbcType=VARCHAR}, #{test_time1,jdbcType=DATE},
+                #{japanese,jdbcType=VARCHAR}, #{notes,jdbcType=VARCHAR}, #{test_time1,jdbcType=DATE},
                 #{result1,jdbcType=VARCHAR}, #{test_time2,jdbcType=DATE}, #{result2,jdbcType=VARCHAR},
                 #{offer,jdbcType=VARCHAR}, #{agreement,jdbcType=VARCHAR}, #{beginDate,jdbcType=DATE}
         )
@@ -134,8 +134,8 @@
             <if test="weChat != null">
                 weChat,
             </if>
-            <if test="Japanese != null">
-                Japanese,
+            <if test="japanese != null">
+                japanese,
             </if>
             <if test="notes != null">
                 notes,
@@ -193,8 +193,8 @@
             <if test="weChat != null">
                 #{weChat,jdbcType=VARCHAR},
             </if>
-            <if test="Japanese != null">
-                #{Japanese,jdbcType=VARCHAR},
+            <if test="japanese != null">
+                #{japanese,jdbcType=VARCHAR},
             </if>
             <if test="notes != null">
                 #{notes,jdbcType=VARCHAR},
@@ -252,8 +252,8 @@
             <if test="weChat != null">
                 #{weChat,jdbcType=VARCHAR},
             </if>
-            <if test="Japanese != null">
-                #{Japanese,jdbcType=VARCHAR},
+            <if test="japanese != null">
+                #{japanese,jdbcType=VARCHAR},
             </if>
             <if test="notes != null">
                 #{notes,jdbcType=VARCHAR},
@@ -293,7 +293,7 @@
             idCard = #{idCard,jdbcType=VARCHAR},
             phone = #{phone,jdbcType=VARCHAR},
             weChat = #{weChat,jdbcType=VARCHAR},
-            Japanese = #{Japanese,jdbcType=VARCHAR},
+            japanese = #{japanese,jdbcType=VARCHAR},
             notes = #{notes,jdbcType=VARCHAR},
             test_time1 = #{test_time1,jdbcType=DATE},
             result1 = #{result1,jdbcType=VARCHAR},

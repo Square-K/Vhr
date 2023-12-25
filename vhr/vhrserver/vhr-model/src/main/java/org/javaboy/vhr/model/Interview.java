@@ -25,7 +25,7 @@ public class Interview implements Serializable {
                 ", idCard='" + idCard + '\'' +
                 ", phone=" + phone + '\'' +
                 ", weChat='" + weChat + '\'' +
-                ", Japanese='" + Japanese + '\'' +
+                ", japanese='" + japanese + '\'' +
                 ", notes='" + notes + '\'' +
                 ", test_time1=" + test_time1 +
                 ", result1=" + result1 + '\'' +
@@ -52,7 +52,7 @@ public class Interview implements Serializable {
 
     private String weChat;
 
-    private String Japanese;
+    private String japanese;
 
     private String notes;
 
@@ -154,11 +154,11 @@ public class Interview implements Serializable {
     }
 
     public String getJapanese() {
-        return Japanese;
+        return japanese;
     }
 
     public void setJapanese(String japanese) {
-        Japanese = japanese;
+        this.japanese = japanese;
     }
 
     public String getNotes() {
