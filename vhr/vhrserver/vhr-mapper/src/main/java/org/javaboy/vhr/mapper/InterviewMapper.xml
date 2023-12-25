@@ -31,9 +31,13 @@
         select max(workID) from interview
     </select>
 
-<!--    <select id="getEmployeeById" resultMap="BaseResultMap">-->
-<!--        select * from employee  where id = #{id}-->
-<!--    </select>-->
+    <select id="getEmployeeByIdCard" resultMap="BaseResultMap">
+        select * from employee  where idCard = #{idCard}
+    </select>
+
+    <select id="getEmployeeById" resultMap="BaseResultMap">
+        select * from employee  where id = #{id}
+    </select>
 
     <select id="getEmployeeByPage" resultMap="BaseResultMap">
         select * from interview
