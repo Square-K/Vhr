@@ -31,12 +31,9 @@
         select max(workID) from interview
     </select>
 
-    <select id="getEmployeeByIdCard" resultMap="BaseResultMap">
-        select * from employee  where idCard = #{idCard}
-    </select>
-
     <select id="getEmployeeById" resultMap="BaseResultMap">
-        select * from employee  where id = #{id}
+        select * from employee
+        where id = #{id,jdbcType=INTEGER}
     </select>
 
     <select id="getEmployeeByPage" resultMap="BaseResultMap">
@@ -45,6 +42,27 @@
                 <if test="emp!=null">
                     <if test="emp.name !=null and emp.name!=''">
                         and name like concat('%',#{emp.name},'%')
+                    </if>
+                    <if test="emp.school !=null and emp.school!=''">
+                        and school = #{emp.school,jdbcType=VARCHAR}
+                    </if>
+                    <if test="emp.japanese !=null and emp.japanese!=''">
+                        and japanese = #{emp.japanese,jdbcType=VARCHAR}
+                    </if>
+                    <if test="emp.result1 !=null and emp.result1!=''">
+                        and result1 = #{emp.result1,jdbcType=VARCHAR}
+                    </if>
+                    <if test="emp.result2 !=null and emp.result2!=''">
+                        and result2 = #{emp.result2,jdbcType=VARCHAR}
+                    </if>
+                    <if test="emp.offer !=null and emp.offer!=''">
+                        and offer = #{emp.offer,jdbcType=VARCHAR}
+                    </if>
+                    <if test="emp.agreement !=null and emp.agreement!=''">
+                        and agreement = #{emp.agreement,jdbcType=VARCHAR}
+                    </if>
+                    <if test="emp.beginDate !=null and emp.beginDate!=''">
+                        and beginDate = #{emp.beginDate,jdbcType=DATE}
                     </if>
                 </if>
             </where>
@@ -91,6 +109,7 @@
             )
         </foreach>
     </insert>
+
     <insert id="insert" parameterType="org.javaboy.vhr.model.Interview">
         insert into interview (id,name, gender, school, speciality, education, graduateDate,
                               idCard,phone,weChat,japanese,notes,test_time1,result1,

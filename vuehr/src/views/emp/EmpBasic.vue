@@ -8,7 +8,7 @@
                               @clear="initEmps"
                               style="width: 350px;margin-right: 10px" v-model="keyword"
                               @keydown.enter.native="initEmps" :disabled="showAdvanceSearchView"></el-input>
-                    <el-button icon="el-icon-search" type="primary" @click="initEmps" :disabled="showAdvanceSearchView">
+                    <el-button icon="el-icon-search" type="primary" @click="initEmpsPt" :disabled="showAdvanceSearchView">
                         搜索
                     </el-button>
                     <el-button type="primary" @click="showAdvanceSearchView = !showAdvanceSearchView">
@@ -43,32 +43,93 @@
             </div>
             <transition name="slide-fade">
                 <div v-show="showAdvanceSearchView"
+                     v-model="searchValue"
                      style="border: 1px solid #409eff;border-radius: 5px;box-sizing: border-box;padding: 5px;margin: 10px 0px;">
-<!--                    <el-row>-->
-<!--                        <el-col :span="5">-->
-<!--                            政治面貌:-->
-<!--                            <el-select v-model="searchValue.politicId" placeholder="政治面貌" size="mini"-->
-<!--                                       style="width: 130px;">-->
-<!--                                <el-option-->
-<!--                                        v-for="item in politicsstatus"-->
-<!--                                        :key="item.id"-->
-<!--                                        :label="item.name"-->
-<!--                                        :value="item.id">-->
-<!--                                </el-option>-->
-<!--                            </el-select>-->
-<!--                        </el-col>-->
-<!--                        <el-col :span="4">-->
-<!--                            民族:-->
-<!--                            <el-select v-model="searchValue.nationId" placeholder="民族" size="mini"-->
-<!--                                       style="width: 130px;">-->
-<!--                                <el-option-->
-<!--                                        v-for="item in nations"-->
-<!--                                        :key="item.id"-->
-<!--                                        :label="item.name"-->
-<!--                                        :value="item.id">-->
-<!--                                </el-option>-->
-<!--                            </el-select>-->
-<!--                        </el-col>-->
+                    <el-row>
+                        <el-col :span="6">
+                            学校:
+                          <el-input placeholder="请输入学校" prefix-icon="el-icon-search"
+                                    size="mini"
+                                    style="width: 130px;"
+                                    clearable
+                                    v-model="searchValue.school"
+                                    ></el-input>
+                        </el-col>
+                        <el-col :span="6">
+                            日语等级:
+                            <el-select v-model="searchValue.japanese" placeholder="日语能力考试通过级别" size="mini"
+                                       style="width: 130px;">
+                                <el-option
+                                        v-for="item in japaneseList"
+                                        :key="item.val"
+                                        :label="item.label"
+                                        :value="item.val">
+                                </el-option>
+                            </el-select>
+                        </el-col>
+                      <el-col :span="6">
+                        面试结果:
+                        <el-select v-model="searchValue.result1" placeholder="是否通过" size="mini"
+                                   style="width: 130px;">
+                          <el-option
+                              v-for="item in resultList"
+                              :key="item.val"
+                              :label="item.label"
+                              :value="item.val">
+                          </el-option>
+                        </el-select>
+                      </el-col>
+                      <el-col :span="6">
+                        笔试结果:
+                        <el-select v-model="searchValue.result2" placeholder="是否通过" size="mini"
+                                   style="width: 130px;">
+                          <el-option
+                              v-for="item in resultList"
+                              :key="item.val"
+                              :label="item.label"
+                              :value="item.val">
+                          </el-option>
+                        </el-select>
+                      </el-col>
+                      <el-col :span="6">
+                        接受offer:
+                        <el-select v-model="searchValue.offer" placeholder="是否通过" size="mini"
+                                   style="width: 130px;">
+                          <el-option
+                              v-for="item in offerList"
+                              :key="item.val"
+                              :label="item.label"
+                              :value="item.val">
+                          </el-option>
+                        </el-select>
+                      </el-col>
+                      <el-col :span="6">
+                        签订协议:
+                        <el-select v-model="searchValue.agreement" placeholder="是否通过" size="mini"
+                                   style="width: 130px;">
+                          <el-option
+                              v-for="item in agreementList"
+                              :key="item.val"
+                              :label="item.label"
+                              :value="item.val">
+                          </el-option>
+                        </el-select>
+                      </el-col>
+                      <el-col :span="8">
+                        开班时间:
+                        <el-date-picker
+                            v-model="searchValue.beginDate"
+                            type="date"
+                            size="mini"
+                            value-format="yyyy-MM-dd"
+                            placeholder="开班时间"
+                        >
+                        </el-date-picker>
+                      </el-col>
+                      <el-col :span="3" :offset="20">
+                        <el-button size="mini" @click="initEmpsPt">取消</el-button>
+                        <el-button size="mini" icon="el-icon-search" type="primary" @click="initEmpsGj">搜索</el-button>
+                      </el-col>
 <!--                        <el-col :span="4">-->
 <!--                            职位:-->
 <!--                            <el-select v-model="searchValue.posId" placeholder="职位" size="mini" style="width: 130px;">-->
@@ -134,7 +195,7 @@
 <!--                            <el-button size="mini">取消</el-button>-->
 <!--                            <el-button size="mini" icon="el-icon-search" type="primary" @click="initEmps('advanced')">搜索</el-button>-->
 <!--                        </el-col>-->
-<!--                    </el-row>-->
+                    </el-row>
                 </div>
             </transition>
         </div>
@@ -416,14 +477,40 @@
             return {
                 selectedEmps: [],
                 searchValue: {
-                    politicId: null,
-                    nationId: null,
-                    jobLevelId: null,
-                    posId: null,
-                    engageForm: null,
-                    departmentId: null,
-                    beginDateScope: null
+                    school: "",
+                    japanese: "",
+                    result1: "",
+                    result2: "",
+                    offer: "",
+                    agreement: "",
+                    beginDate: "",
                 },
+                japaneseList:[
+                    {label: '无',val: ''},
+                    {label: 'N1',val: 'N1'},
+                    {label: 'N2',val: 'N2'},
+                    {label: 'N3',val: 'N3'},
+                    {label: 'N4',val: 'N4'},
+                    {label: 'N5',val: 'N5'},
+                ],
+                resultList:[
+                    {label: '无',val: ''},
+                    {label: '通过',val:'通过'},
+                    {label: '未通过',val:'未通过'},
+                    {label: '待定',val:'V'},
+                ],
+                offerList:[
+                  {label: '无',val: ''},
+                  {label: '已接受',val:'已接受'},
+                  {label: '未接受',val:'未接受'},
+                  {label: '待定',val:'V'},
+                ],
+                agreementList:[
+                  {label: '无',val: ''},
+                  {label: '已签订',val:'已签订'},
+                  {label: '未签订',val:'未签订'},
+                  {label: '待定',val:'V'},
+                ],
                 title: '',
                 importDataBtnText: '导入数据',
                 importDataBtnIcon: 'el-icon-upload2',
@@ -552,43 +639,54 @@
               this.selectedEmps = selection;
             },
             deleteEmp() {
-                this.$confirm('此操作将永久删除所选用户, 是否继续?', '提示', {
+                if (this.selectedEmps.length === 0) {
+                  this.$message({
+                    type: 'info',
+                    message: '请选择至少一个用户进行删除!'
+                  });
+                }else {
+                  this.$confirm('此操作将永久删除所选用户, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
-                }).then(() => {
+                  }).then(() => {
                     this.selectedEmps.forEach(emp => {
                       this.deleteRequest("/employee/basic/" + emp.id).then(resp => {
                         if (resp) {
+                          this.$message({
+                            type: 'info',
+                            message: '删除成功！'
+                          });
                           this.initEmps();
                         }
                       })
                     })
-                }).catch(() => {
+                  }).catch(() => {
                     this.$message({
-                        type: 'info',
-                        message: '已取消删除'
+                      type: 'info',
+                      message: '已取消删除'
                     });
-                });
+                  });
+                }
             },
             doAddEmp() {
-                    //触发表单验证
-                    this.$refs['empForm'].validate(valid => {
-                        if (valid) {
-                          //验证通过，数据传到后端
-                            this.postRequest("/employee/basic/", this.emp).then(resp => {
-                                if (resp) {
-                                    this.$message({
-                                      message:resp.message,
-                                      type:'success'
-                                    })
-                                    //关闭对话框，刷新表格
-                                    this.dialogVisible = false;
-                                    this.initEmps();
-                                }
-                            })
-                        }
-                    });
+                //触发表单验证
+                this.$refs['empForm'].validate(valid => {
+                    if (valid) {
+                      //验证通过，数据传到后端
+                        this.postRequest("/employee/basic/", this.emp).then(resp => {
+                            if (resp) {
+                              this.$message({
+                                type: 'info',
+                                message: '添加成功！'
+                              });
+                                //关闭对话框，刷新表格
+                                this.dialogVisible = false;
+                                this.initEmps();
+                            }
+                        })
+                    }
+                });
 
             },
             // handleNodeClick(data) {
@@ -671,10 +769,32 @@
                 this.title = '添加员工';
                 this.dialogVisible = true;
             },
+
+            initEmpsGj(){
+                this.keyword = '';
+                this.initEmps();
+            },
+
+            initEmpsPt(){
+              this.searchValue.school = '';
+              this.searchValue.japanese = '';
+              this.searchValue.result1 = '';
+              this.searchValue.result2 = '';
+              this.searchValue.offer = '';
+              this.searchValue.agreement = '';
+              this.searchValue.beginDate='';
+              this .showAdvanceSearchView = false
+              this.initEmps();
+           },
+
             initEmps() {
                 this.loading = true;
                 let url = '/employee/basic/?page=' + this.page + '&size=' + this.size;
                 url += "&name=" + this.keyword;
+                url += "&school=" + this.searchValue.school + "&japanese=" + this.searchValue.japanese +
+                    "&result1=" + this.searchValue.result1 + "&result2=" + this.searchValue.result2 +
+                    "&offer=" + this.searchValue.offer + "&agreement=" + this.searchValue.agreement +
+                    "&beginDate=" + this.searchValue.beginDate;
                 this.getRequest(url).then(resp => {
                     this.loading = false;
                     if (resp) {
@@ -682,7 +802,7 @@
                         this.total = resp.total;
                     }
                 });
-            }
+            },
         }
     }
 </script>
