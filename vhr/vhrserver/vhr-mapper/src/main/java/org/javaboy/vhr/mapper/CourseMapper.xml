@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.javaboy.vhr.mapper.CourseMapper">
+    <resultMap id="CourseMap" type="org.javaboy.vhr.model.Course">
+        <id column="courseId" property="courseId" jdbcType="INTEGER"/>
+        <result column="weekNum" property="weekNum" jdbcType="INTEGER"/>
+        <result column="courseName" property="courseName" jdbcType="VARCHAR"/>
+        <result column="courseDate" property="courseDate" jdbcType="VARCHAR"/>
+        <result column="week" property="week" jdbcType="VARCHAR"/>
+        <result column="section" property="section" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List" >
+        courseId, weekNum, courseName, courseDate, week, section
+    </sql>
+    <!--获取所有课程信息（按照星期排序用于导出表格）-->
+    <select id="getAllCourse" resultMap="CourseMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List">
+        </include>
+        from course
+        where weekNum = #{weekNum,jdbcType=INTEGER}
+        order by week
+    </select>
+    <!--获取所有的周数-->
+    <select id="getAllWeekNums" resultType="java.lang.Integer">
+        select weekNum from course group by weekNum order by weekNum asc
+    </select>
+    <!--获取最小的周数-->
+    <select id="getMinWeekNum" resultType="java.lang.Integer">
+        select weekNum from course group by weekNum order by weekNum asc limit 1
+    </select>
+    <!--根据周数删除数据-->
+    <delete id="deleteCourseByWeekNum" parameterType="java.lang.Integer">
+        delete from course where weekNum = #{weekNum,jdbcType=INTEGER}
+    </delete>
+    <!--添加课程数据-->
+    <insert id="addCourse">
+        insert into course (weekNum, courseName, courseDate, week, section)
+        values
+        <foreach collection="list" separator="," item="c">
+            (#{c.weekNum, jdbcType=INTEGER},#{c.courseName, jdbcType=VARCHAR},
+            #{c.courseDate, jdbcType=VARCHAR},#{c.week, jdbcType=VARCHAR},
+             #{c.section, jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+    <!--更新课程名-->
+    <update id="updateCourse" parameterType="org.javaboy.vhr.model.Course">
+        update course
+        set
+        <if test="courseName != null">courseName = #{courseName, jdbcType=VARCHAR}</if>
+        where courseId = #{courseId,jdbcType=INTEGER}
+    </update>
+</mapper>
