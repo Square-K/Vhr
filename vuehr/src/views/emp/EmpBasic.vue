@@ -323,6 +323,14 @@
                         align="left"
                         label="开班时间">
                 </el-table-column>
+                <el-table-column
+                    width="80"
+                    align="center"
+                    label="操作">
+                  <template slot-scope="scope">
+                    <el-button type="text" size="small" @click="showEditEmpView(scope.row)">编辑</el-button>
+                  </template>
+                </el-table-column>
             </el-table>
             <div style="display: flex;justify-content: flex-end">
                 <el-pagination
@@ -463,9 +471,9 @@
                 </el-form>
             </div>
             <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="doAddEmp">确 定</el-button>
-  </span>
+              <el-button @click="dialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="doAddEmp">确 定</el-button>
+            </span>
         </el-dialog>
     </div>
 </template>
@@ -628,13 +636,7 @@
                     beginDate: ""
                 }
             },
-            showEditEmpView(data) {
-                this.initPositions();
-                this.title = '编辑员工信息';
-                this.emp = data;
-                this.inputDepName = data.department.name;
-                this.dialogVisible = true;
-            },
+
             handleSelectionChange(selection) {
               this.selectedEmps = selection;
             },
@@ -653,14 +655,14 @@
                     this.selectedEmps.forEach(emp => {
                       this.deleteRequest("/employee/basic/" + emp.id).then(resp => {
                         if (resp) {
-                          this.$message({
-                            type: 'info',
-                            message: '删除成功！'
-                          });
                           this.initEmps();
                         }
                       })
                     })
+                    this.$message({
+                      type: 'info',
+                      message: '删除成功！'
+                    });
                   }).catch(() => {
                     this.$message({
                       type: 'info',
@@ -674,7 +676,7 @@
                 this.$refs['empForm'].validate(valid => {
                     if (valid) {
                       //验证通过，数据传到后端
-                        this.postRequest("/employee/basic/", this.emp).then(resp => {
+                        this.postRequest("/employee/basic/",this.emp).then(resp => {
                             if (resp) {
                               this.$message({
                                 type: 'info',
@@ -769,7 +771,11 @@
                 this.title = '添加员工';
                 this.dialogVisible = true;
             },
-
+            showEditEmpView(row) {
+              this.emp = row;
+              this.title = '编辑员工信息';
+              this.dialogVisible = true;
+            },
             initEmpsGj(){
                 this.keyword = '';
                 this.initEmps();

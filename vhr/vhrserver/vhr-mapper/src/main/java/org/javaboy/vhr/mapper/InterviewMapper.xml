@@ -32,8 +32,12 @@
     </select>
 
     <select id="getEmployeeById" resultMap="BaseResultMap">
-        select * from employee
-        where id = #{id,jdbcType=INTEGER}
+        select * from interview
+       <where>
+           <if test="id != null">
+               id = #{id,jdbcType=INTEGER}
+           </if>
+       </where>
     </select>
 
     <select id="getEmployeeByPage" resultMap="BaseResultMap">
@@ -61,7 +65,7 @@
                     <if test="emp.agreement !=null and emp.agreement!=''">
                         and agreement = #{emp.agreement,jdbcType=VARCHAR}
                     </if>
-                    <if test="emp.beginDate !=null and emp.beginDate!=''">
+                    <if test="emp.beginDate !=null">
                         and beginDate = #{emp.beginDate,jdbcType=DATE}
                     </if>
                 </if>
@@ -99,13 +103,14 @@
         values
         <foreach collection="list" separator="," item="emp">
             (#{emp.name,jdbcType=VARCHAR}, #{emp.gender,jdbcType=CHAR},
-            #{emp.school,jdbcType=VARCHAR}, #{emp.speciality,jdbcType=VARCHAR}, #{emp.education,jdbcType=VARCHAR},
-            #{emp.graduateDate,jdbcType=DATE},
-            #{emp.idCard,jdbcType=VARCHAR}, #{emp.phone,jdbcType=VARCHAR}, #{emp.email,jdbcType=VARCHAR},
-            #{emp.phone,jdbcType=VARCHAR}, #{emp.address,jdbcType=VARCHAR}, #{emp.weChat,jdbcType=VARCHAR},
-            #{emp.japanese,jdbcType=VARCHAR}, #{emp.notes,jdbcType=VARCHAR}, #{emp.test_time1,jdbcType=DATE},
-            #{emp.result1,jdbcType=VARCHAR}, #{emp.test_time2,jdbcType=DATE}, #{emp.result2,jdbcType=VARCHAR},
-            #{emp.offer,jdbcType=VARCHAR}, #{emp.agreement,jdbcType=VARCHAR}, #{emp.beginDate,jdbcType=DATE}
+            #{emp.school,jdbcType=VARCHAR}, #{emp.speciality,jdbcType=VARCHAR},
+            #{emp.education,jdbcType=VARCHAR},#{emp.graduateDate,jdbcType=DATE},
+            #{emp.idCard,jdbcType=VARCHAR}, #{emp.phone,jdbcType=VARCHAR},
+            #{emp.weChat,jdbcType=VARCHAR},#{emp.japanese,jdbcType=VARCHAR},
+            #{emp.notes,jdbcType=VARCHAR}, #{emp.test_time1,jdbcType=DATE},
+            #{emp.result1,jdbcType=VARCHAR}, #{emp.test_time2,jdbcType=DATE},
+            #{emp.result2,jdbcType=VARCHAR},#{emp.offer,jdbcType=VARCHAR},
+            #{emp.agreement,jdbcType=VARCHAR}, #{emp.beginDate,jdbcType=DATE}
             )
         </foreach>
     </insert>
@@ -117,11 +122,11 @@
           )
         values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{gender,jdbcType=CHAR},
                 #{school,jdbcType=VARCHAR}, #{speciality,jdbcType=VARCHAR}, #{education,jdbcType=VARCHAR},
-                #{graduateDate,jdbcType=DATE},
-                #{idCard,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},  #{weChat,jdbcType=VARCHAR},
-                #{japanese,jdbcType=VARCHAR}, #{notes,jdbcType=VARCHAR}, #{test_time1,jdbcType=DATE},
-                #{result1,jdbcType=VARCHAR}, #{test_time2,jdbcType=DATE}, #{result2,jdbcType=VARCHAR},
-                #{offer,jdbcType=VARCHAR}, #{agreement,jdbcType=VARCHAR}, #{beginDate,jdbcType=DATE}
+                #{graduateDate,jdbcType=DATE},#{idCard,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
+                #{weChat,jdbcType=VARCHAR},#{japanese,jdbcType=VARCHAR}, #{notes,jdbcType=VARCHAR},
+                #{test_time1,jdbcType=DATE},#{result1,jdbcType=VARCHAR}, #{test_time2,jdbcType=DATE},
+                #{result2,jdbcType=VARCHAR},#{offer,jdbcType=VARCHAR}, #{agreement,jdbcType=VARCHAR},
+                #{beginDate,jdbcType=DATE}
         )
     </insert>
     <insert id="insertSelective" parameterType="org.javaboy.vhr.model.Interview" useGeneratedKeys="true" keyProperty="id">
