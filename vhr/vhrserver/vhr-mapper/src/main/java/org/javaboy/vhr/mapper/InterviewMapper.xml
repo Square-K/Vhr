@@ -254,58 +254,58 @@
         update interview
         <set>
             <if test="name != null">
-                #{name,jdbcType=VARCHAR},
+                name = #{name,jdbcType=VARCHAR},
             </if>
             <if test="gender != null">
-                #{gender,jdbcType=CHAR},
+                gender = #{gender,jdbcType=CHAR},
             </if>
             <if test="school != null">
-                #{school,jdbcType=VARCHAR},
+                school = #{school,jdbcType=VARCHAR},
             </if>
             <if test="speciality != null">
-                #{speciality,jdbcType=VARCHAR},
+                speciality = #{speciality,jdbcType=VARCHAR},
             </if>
             <if test="education != null">
-                #{education,jdbcType=VARCHAR},
+                education = #{education,jdbcType=VARCHAR},
             </if>
             <if test="graduateDate != null">
-                #{graduateDate,jdbcType=DATE},
+                graduateDate = #{graduateDate,jdbcType=DATE},
             </if>
             <if test="idCard != null">
-                #{idCard,jdbcType=VARCHAR},
+                idCard = #{idCard,jdbcType=VARCHAR},
             </if>
             <if test="phone != null">
-                #{phone,jdbcType=VARCHAR},
+                phone = #{phone,jdbcType=VARCHAR},
             </if>
             <if test="weChat != null">
-                #{weChat,jdbcType=VARCHAR},
+                weChat = #{weChat,jdbcType=VARCHAR},
             </if>
             <if test="japanese != null">
-                #{japanese,jdbcType=VARCHAR},
+                japanese = #{japanese,jdbcType=VARCHAR},
             </if>
             <if test="notes != null">
-                #{notes,jdbcType=VARCHAR},
+                notes = #{notes,jdbcType=VARCHAR},
             </if>
             <if test="test_time1 != null">
-                #{test_time1,jdbcType=DATE},
+                test_time1 = #{test_time1,jdbcType=DATE},
             </if>
             <if test="result1 != null">
-                #{result1,jdbcType=VARCHAR},
+                result1 = #{result1,jdbcType=VARCHAR},
             </if>
             <if test="test_time2 != null">
-                #{test_time2,jdbcType=DATE},
+                test_time2 = #{test_time2,jdbcType=DATE},
             </if>
             <if test="result2 != null">
-                #{result2,jdbcType=VARCHAR},
+                result2 = #{result2,jdbcType=VARCHAR},
             </if>
             <if test="offer != null">
-                #{offer,jdbcType=VARCHAR},
+                offer = #{offer,jdbcType=VARCHAR},
             </if>
             <if test="agreement != null">
-                #{agreement,jdbcType=VARCHAR},
+                agreement = #{agreement,jdbcType=VARCHAR},
             </if>
             <if test="beginDate != null">
-                #{beginDate,jdbcType=DATE},
+                beginDate = #{beginDate,jdbcType=DATE},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}

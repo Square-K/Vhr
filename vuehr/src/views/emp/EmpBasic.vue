@@ -115,7 +115,7 @@
                           </el-option>
                         </el-select>
                       </el-col>
-                      <el-col :span="8">
+                      <el-col :span="10">
                         开班时间:
                         <el-date-picker
                             v-model="searchValue.beginDate"
@@ -126,7 +126,7 @@
                         >
                         </el-date-picker>
                       </el-col>
-                      <el-col :span="3" :offset="20">
+                      <el-col :span="6" :offset="20">
                         <el-button size="mini" @click="initEmpsPt">取消</el-button>
                         <el-button size="mini" icon="el-icon-search" type="primary" @click="initEmpsGj">搜索</el-button>
                       </el-col>
@@ -472,7 +472,7 @@
             </div>
             <span slot="footer" class="dialog-footer">
               <el-button @click="dialogVisible = false">取 消</el-button>
-              <el-button type="primary" @click="doAddEmp">确 定</el-button>
+              <el-button type="primary" @click="doEmp=='add' ? doAddEmp() : doUpdateEmp()">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -494,7 +494,7 @@
                     beginDate: "",
                 },
                 japaneseList:[
-                    {label: '无',val: ''},
+                    {label: '无',val: '无'},
                     {label: 'N1',val: 'N1'},
                     {label: 'N2',val: 'N2'},
                     {label: 'N3',val: 'N3'},
@@ -530,6 +530,10 @@
                 popVisible: false,
                 popVisible2: false,
                 dialogVisible: false,
+                doEmp: {
+                  type:String,
+                  default:""
+                },
                 total: 0,
                 page: 1,
                 keyword: '',
@@ -691,6 +695,26 @@
                 });
 
             },
+            doUpdateEmp() {
+              //触发表单验证
+              this.$refs['empForm'].validate(valid => {
+                if (valid) {
+                  //验证通过，数据传到后端
+                  this.putRequest("/employee/basic/",this.emp).then(resp => {
+                    if (resp) {
+                      this.$message({
+                        type: 'info',
+                        message: '更改成功！'
+                      });
+                      //关闭对话框，刷新表格
+                      this.dialogVisible = false;
+                      this.initEmps();
+                    }
+                  })
+                }
+              });
+
+            },
             // handleNodeClick(data) {
             //     this.inputDepName = data.name;
             //     this.emp.departmentId = data.id;
@@ -767,11 +791,13 @@
                 this.initEmps();
             },
             showAddEmpView() {
+                this.doEmp = 'add';
                 this.emptyEmp();
                 this.title = '添加员工';
                 this.dialogVisible = true;
             },
             showEditEmpView(row) {
+              this.doEmp = "";
               this.emp = row;
               this.title = '编辑员工信息';
               this.dialogVisible = true;
