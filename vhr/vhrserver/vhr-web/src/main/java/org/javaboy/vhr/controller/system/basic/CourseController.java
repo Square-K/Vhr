@@ -170,16 +170,25 @@ public class CourseController {
      * 导入数据
      * @param file
      * @param weekNum
-     * @return
+     * @return true为添加成功，false为添加失败
      * @throws IOException
      */
     @PostMapping("/import/{weekNum}")
-    public RespBean importData(MultipartFile file, @PathVariable Integer weekNum) throws IOException {
+    public boolean importData(MultipartFile file, @PathVariable Integer weekNum) throws IOException {
         List<Course> list = CourseUtils.excel2Course(file);
-        if (courseService.addCourse(list,weekNum) != null) {
-            return RespBean.ok("上传成功");
+        boolean bo = true;
+        for (Course course : list) {
+            if(course.getSection() == null){
+                bo = false;
+                break;
+            }
         }
-        return RespBean.error("上传失败");
+        if(bo){
+            if (courseService.addCourse(list,weekNum) == list.size()) {
+                return bo;
+            }
+        }
+        return bo;
     }
 
 

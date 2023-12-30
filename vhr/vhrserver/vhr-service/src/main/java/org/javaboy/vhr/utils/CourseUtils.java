@@ -134,16 +134,16 @@ public class CourseUtils {
                             case STRING:
                                 String cellValue = cell.getStringCellValue();
                                 switch (k) {
-                                    case 1:
+                                    case 2:
                                         course.setCourseName(cellValue);
                                         break;
-                                    case 2:
+                                    case 3:
                                         course.setCourseDate(cellValue);
                                         break;
-                                    case 3:
+                                    case 4:
                                         course.setWeek(cellValue);
                                         break;
-                                    case 4:
+                                    case 5:
                                         course.setSection(cellValue);
                                         break;
                                 }

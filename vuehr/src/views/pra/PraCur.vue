@@ -163,7 +163,7 @@ export default {
     this.selectMinWeekNum();
   },
   computed: {
-    /**导出数据 */
+    /**导入数据 */
      uploadAction() {
        return `/course/import/${this.lastWeekNum}`;
      },
@@ -173,12 +173,25 @@ export default {
       this.importDataBtnText = '导入数据';
       this.importDataBtnIcon = 'el-icon-upload2';
       this.importDataDisabled = false;
+      this.$alert('导入失败！', '', {
+        confirmButtonText: '确定',
+      });
     },
     onSuccess(response, file, fileList) {
       this.importDataBtnText = '导入数据';
       this.importDataBtnIcon = 'el-icon-upload2';
       this.importDataDisabled = false;
-      this.initEmps();
+      if(response){
+        this.$alert('导入成功', '', {
+          confirmButtonText: '确定',
+        });
+        this.handleButtonClick(this.lastWeekNum);
+      }else{
+        this.$alert('导入失败', '', {
+          confirmButtonText: '确定',
+        });
+      }
+
     },
     beforeUpload() {
       this.importDataBtnText = '正在导入';
