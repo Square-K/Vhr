@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.javaboy.vhr.mapper.EmployeeExerciseMapper">
+    <resultMap id="employeeExerciseResultMap" type="org.javaboy.vhr.model.EmployeeExerciseSearchResult">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="gender" property="gender" jdbcType="VARCHAR"/>
+        <result column="school" property="school" jdbcType="VARCHAR"/>
+        <result column="speciality" property="speciality" jdbcType="VARCHAR"/>
+        <result column="education" property="education" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="weChat" property="weChat" jdbcType="VARCHAR"/>
+        <result column="japaneseSituation" property="japaneseSituation" jdbcType="VARCHAR"/>
+        <result column="studyAbility" property="studyAbility" jdbcType="VARCHAR"/>
+        <result column="studyProgress" property="studyProgress" jdbcType="VARCHAR"/>
+        <result column="workState" property="workState" jdbcType="INTEGER"/>
+    </resultMap>
+    <select id="searchEmployee" resultMap="employeeExerciseResultMap">
+        SELECT
+        ina.id,
+        ina.name,
+        ina.gender,
+        ina.school,
+        ina.speciality,
+        ina.education,
+        ina.phone,
+        ina.weChat,
+        empe.japaneseSituation,
+        empe.studyAbility,
+        empe.studyProgress,
+        empe.workState
+        FROM
+        interview ina
+        INNER JOIN employee_exercise empe ON ina.id = empe.id
+        <if test="name != null">
+            WHERE ina.name = #{name}
+        </if>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE FROM employee_exercise WHERE id = #{id}
+    </delete>
+
+    <select id="searchEmployeesByCriteria" resultMap="employeeExerciseResultMap">
+        SELECT
+        ina.id,
+        ina.name,
+        ina.gender,
+        ina.school,
+        ina.speciality,
+        ina.education,
+        ina.phone,
+        ina.weChat,
+        empe.japaneseSituation,
+        empe.studyAbility,
+        empe.studyProgress,
+        empe.workState
+        FROM
+        interview ina
+        INNER JOIN employee_exercise empe ON ina.id = empe.id
+        <where>
+            <!-- 判断参数是否非空，如果非空，则加入对应的条件 -->
+            <if test="japaneseSituation != null and japaneseSituation != ''">
+                AND empe.japaneseSituation = #{japaneseSituation}
+            </if>
+            <if test="studyAbility != null and studyAbility != ''">
+                AND empe.studyAbility = #{studyAbility}
+            </if>
+            <if test="studyProgress != null and studyProgress != ''">
+                AND empe.studyProgress = #{studyProgress}
+            </if>
+            <if test="workState != null">
+                AND empe.workState = #{workState}
+            </if>
+        </where>
+    </select>
+    <insert id="insertSelective" parameterType="org.javaboy.vhr.model.EmployeeExercise">
+        INSERT INTO employee_exercise (id, japaneseSituation, studyAbility, studyProgress, workState)
+        VALUES (#{id}, #{japaneseSituation}, #{studyAbility}, #{studyProgress}, #{workState})
+    </insert>
+
+
+
+</mapper>
