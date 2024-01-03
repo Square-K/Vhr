@@ -56,21 +56,21 @@ public class EmpeController {
         return resultMap;
     }
 
-    @PostMapping("/addInterview")
-    public RespBean addInterview(@RequestBody Interview interview) {
-        try {
-            // 调用添加单个面试信息的方法
-            Integer result = interviewService.addEmps(interview);
-            if (result != null) {
-                return RespBean.ok("添加面试信息成功！");
-            } else {
-                return RespBean.error("添加面试信息失败，请重试！");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return RespBean.error("添加面试信息失败，请重试！");
-        }
-    }
+//    @PostMapping("/addInterview")
+//    public RespBean addInterview(@RequestBody Interview interview) {
+////        try {
+////            // 调用添加单个面试信息的方法
+//////            Integer result = interviewService.addEmps(interview);
+//////            if (result != null) {
+//////                return RespBean.ok("添加面试信息成功！");
+//////            } else {
+//////                return RespBean.error("添加面试信息失败，请重试！");
+//////            }
+////        } catch (Exception e) {
+////            e.printStackTrace();
+////            return RespBean.error("添加面试信息失败，请重试！");
+////        }
+//    }
 
 
 
