@@ -2,10 +2,14 @@ package org.javaboy.vhr.service;
 
 import org.javaboy.vhr.mapper.EmployeeExerciseMapper;
 import org.javaboy.vhr.model.EmployeeExerciseSearchResult;
+import org.javaboy.vhr.model.Interview;
+import org.javaboy.vhr.model.RespPageBean;
 import org.springframework.stereotype.Service;
 import org.javaboy.vhr.model.EmployeeExercise;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -34,16 +38,31 @@ public class EmployeeExerciseService {
     }
     public boolean addEmployee(EmployeeExercise employee) {
         try {
-            // 执行添加员工信息的逻辑
             int result = employeeExerciseMapper.insertSelective(employee);
-            // 根据实际需求处理成功与失败的情况，例如记录日志等
 
-            return result == 1; // 返回添加结果
+            return result == 1;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
+
+
+    @Transactional
+    public boolean updateEmployee(EmployeeExercise updatedEmployee) {
+        try {
+            // 直接使用传入的更新后的员工信息
+            int result = employeeExerciseMapper.updateByPrimaryKeySelective(updatedEmployee);
+
+            // 检查更新是否成功
+            return result == 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 根据需要处理异常或记录日志
+            return false;
+        }
+    }
+
 
 
 

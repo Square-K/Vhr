@@ -60,4 +60,8 @@ public class EmployeeExercise implements Serializable {
     public void setWorkState(Integer workState) {
         this.workState = workState;
     }
+
+    // 无参构造函数
+    public EmployeeExercise() {
+    }
 }

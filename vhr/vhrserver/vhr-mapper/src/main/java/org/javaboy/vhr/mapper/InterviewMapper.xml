@@ -31,13 +31,12 @@
         select max(workID) from interview
     </select>
 
+    <select id="getEmployeeByIdCard" resultMap="BaseResultMap">
+        select * from employee  where idCard = #{idCard}
+    </select>
+
     <select id="getEmployeeById" resultMap="BaseResultMap">
-        select * from interview
-       <where>
-           <if test="id != null">
-               id = #{id,jdbcType=INTEGER}
-           </if>
-       </where>
+        select * from employee  where id = #{id}
     </select>
 
     <select id="getEmployeeByPage" resultMap="BaseResultMap">
@@ -46,27 +45,6 @@
                 <if test="emp!=null">
                     <if test="emp.name !=null and emp.name!=''">
                         and name like concat('%',#{emp.name},'%')
-                    </if>
-                    <if test="emp.school !=null and emp.school!=''">
-                        and school = #{emp.school,jdbcType=VARCHAR}
-                    </if>
-                    <if test="emp.japanese !=null and emp.japanese!=''">
-                        and japanese = #{emp.japanese,jdbcType=VARCHAR}
-                    </if>
-                    <if test="emp.result1 !=null and emp.result1!=''">
-                        and result1 = #{emp.result1,jdbcType=VARCHAR}
-                    </if>
-                    <if test="emp.result2 !=null and emp.result2!=''">
-                        and result2 = #{emp.result2,jdbcType=VARCHAR}
-                    </if>
-                    <if test="emp.offer !=null and emp.offer!=''">
-                        and offer = #{emp.offer,jdbcType=VARCHAR}
-                    </if>
-                    <if test="emp.agreement !=null and emp.agreement!=''">
-                        and agreement = #{emp.agreement,jdbcType=VARCHAR}
-                    </if>
-                    <if test="emp.beginDate !=null">
-                        and beginDate = #{emp.beginDate,jdbcType=DATE}
                     </if>
                 </if>
             </where>
@@ -103,18 +81,16 @@
         values
         <foreach collection="list" separator="," item="emp">
             (#{emp.name,jdbcType=VARCHAR}, #{emp.gender,jdbcType=CHAR},
-            #{emp.school,jdbcType=VARCHAR}, #{emp.speciality,jdbcType=VARCHAR},
-            #{emp.education,jdbcType=VARCHAR},#{emp.graduateDate,jdbcType=DATE},
-            #{emp.idCard,jdbcType=VARCHAR}, #{emp.phone,jdbcType=VARCHAR},
-            #{emp.weChat,jdbcType=VARCHAR},#{emp.japanese,jdbcType=VARCHAR},
-            #{emp.notes,jdbcType=VARCHAR}, #{emp.test_time1,jdbcType=DATE},
-            #{emp.result1,jdbcType=VARCHAR}, #{emp.test_time2,jdbcType=DATE},
-            #{emp.result2,jdbcType=VARCHAR},#{emp.offer,jdbcType=VARCHAR},
-            #{emp.agreement,jdbcType=VARCHAR}, #{emp.beginDate,jdbcType=DATE}
+            #{emp.school,jdbcType=VARCHAR}, #{emp.speciality,jdbcType=VARCHAR}, #{emp.education,jdbcType=VARCHAR},
+            #{emp.graduateDate,jdbcType=DATE},
+            #{emp.idCard,jdbcType=VARCHAR}, #{emp.phone,jdbcType=VARCHAR}, #{emp.email,jdbcType=VARCHAR},
+            #{emp.phone,jdbcType=VARCHAR}, #{emp.address,jdbcType=VARCHAR}, #{emp.weChat,jdbcType=VARCHAR},
+            #{emp.japanese,jdbcType=VARCHAR}, #{emp.notes,jdbcType=VARCHAR}, #{emp.test_time1,jdbcType=DATE},
+            #{emp.result1,jdbcType=VARCHAR}, #{emp.test_time2,jdbcType=DATE}, #{emp.result2,jdbcType=VARCHAR},
+            #{emp.offer,jdbcType=VARCHAR}, #{emp.agreement,jdbcType=VARCHAR}, #{emp.beginDate,jdbcType=DATE}
             )
         </foreach>
     </insert>
-
     <insert id="insert" parameterType="org.javaboy.vhr.model.Interview">
         insert into interview (id,name, gender, school, speciality, education, graduateDate,
                               idCard,phone,weChat,japanese,notes,test_time1,result1,
@@ -122,11 +98,11 @@
           )
         values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{gender,jdbcType=CHAR},
                 #{school,jdbcType=VARCHAR}, #{speciality,jdbcType=VARCHAR}, #{education,jdbcType=VARCHAR},
-                #{graduateDate,jdbcType=DATE},#{idCard,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
-                #{weChat,jdbcType=VARCHAR},#{japanese,jdbcType=VARCHAR}, #{notes,jdbcType=VARCHAR},
-                #{test_time1,jdbcType=DATE},#{result1,jdbcType=VARCHAR}, #{test_time2,jdbcType=DATE},
-                #{result2,jdbcType=VARCHAR},#{offer,jdbcType=VARCHAR}, #{agreement,jdbcType=VARCHAR},
-                #{beginDate,jdbcType=DATE}
+                #{graduateDate,jdbcType=DATE},
+                #{idCard,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},  #{weChat,jdbcType=VARCHAR},
+                #{japanese,jdbcType=VARCHAR}, #{notes,jdbcType=VARCHAR}, #{test_time1,jdbcType=DATE},
+                #{result1,jdbcType=VARCHAR}, #{test_time2,jdbcType=DATE}, #{result2,jdbcType=VARCHAR},
+                #{offer,jdbcType=VARCHAR}, #{agreement,jdbcType=VARCHAR}, #{beginDate,jdbcType=DATE}
         )
     </insert>
     <insert id="insertSelective" parameterType="org.javaboy.vhr.model.Interview" useGeneratedKeys="true" keyProperty="id">
@@ -254,58 +230,58 @@
         update interview
         <set>
             <if test="name != null">
-                name = #{name,jdbcType=VARCHAR},
+                #{name,jdbcType=VARCHAR},
             </if>
             <if test="gender != null">
-                gender = #{gender,jdbcType=CHAR},
+                #{gender,jdbcType=CHAR},
             </if>
             <if test="school != null">
-                school = #{school,jdbcType=VARCHAR},
+                #{school,jdbcType=VARCHAR},
             </if>
             <if test="speciality != null">
-                speciality = #{speciality,jdbcType=VARCHAR},
+                #{speciality,jdbcType=VARCHAR},
             </if>
             <if test="education != null">
-                education = #{education,jdbcType=VARCHAR},
+                #{education,jdbcType=VARCHAR},
             </if>
             <if test="graduateDate != null">
-                graduateDate = #{graduateDate,jdbcType=DATE},
+                #{graduateDate,jdbcType=DATE},
             </if>
             <if test="idCard != null">
-                idCard = #{idCard,jdbcType=VARCHAR},
+                #{idCard,jdbcType=VARCHAR},
             </if>
             <if test="phone != null">
-                phone = #{phone,jdbcType=VARCHAR},
+                #{phone,jdbcType=VARCHAR},
             </if>
             <if test="weChat != null">
-                weChat = #{weChat,jdbcType=VARCHAR},
+                #{weChat,jdbcType=VARCHAR},
             </if>
             <if test="japanese != null">
-                japanese = #{japanese,jdbcType=VARCHAR},
+                #{japanese,jdbcType=VARCHAR},
             </if>
             <if test="notes != null">
-                notes = #{notes,jdbcType=VARCHAR},
+                #{notes,jdbcType=VARCHAR},
             </if>
             <if test="test_time1 != null">
-                test_time1 = #{test_time1,jdbcType=DATE},
+                #{test_time1,jdbcType=DATE},
             </if>
             <if test="result1 != null">
-                result1 = #{result1,jdbcType=VARCHAR},
+                #{result1,jdbcType=VARCHAR},
             </if>
             <if test="test_time2 != null">
-                test_time2 = #{test_time2,jdbcType=DATE},
+                #{test_time2,jdbcType=DATE},
             </if>
             <if test="result2 != null">
-                result2 = #{result2,jdbcType=VARCHAR},
+                #{result2,jdbcType=VARCHAR},
             </if>
             <if test="offer != null">
-                offer = #{offer,jdbcType=VARCHAR},
+                #{offer,jdbcType=VARCHAR},
             </if>
             <if test="agreement != null">
-                agreement = #{agreement,jdbcType=VARCHAR},
+                #{agreement,jdbcType=VARCHAR},
             </if>
             <if test="beginDate != null">
-                beginDate = #{beginDate,jdbcType=DATE},
+                #{beginDate,jdbcType=DATE},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}

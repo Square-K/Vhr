@@ -142,4 +142,6 @@ public class EmployeeExerciseSearchResult implements Serializable {
         this.studyProgress = studyProgress;
         this.workState = workState;
     }
+    public EmployeeExerciseSearchResult() {
+    }
 }

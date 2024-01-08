@@ -78,6 +78,18 @@
         VALUES (#{id}, #{japaneseSituation}, #{studyAbility}, #{studyProgress}, #{workState})
     </insert>
 
+    <update id="updateByPrimaryKeySelective" parameterType="org.javaboy.vhr.model.EmployeeExercise">
+        UPDATE employee_exercise
+        <set>
+            <if test="japaneseSituation != null">japaneseSituation = #{japaneseSituation},</if>
+            <if test="studyAbility != null">studyAbility = #{studyAbility},</if>
+            <if test="studyProgress != null">studyProgress = #{studyProgress},</if>
+            <if test="workState != null">workState = #{workState},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
 
 
 </mapper>

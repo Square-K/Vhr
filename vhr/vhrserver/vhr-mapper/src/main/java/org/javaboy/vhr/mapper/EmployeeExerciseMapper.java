@@ -2,11 +2,13 @@ package org.javaboy.vhr.mapper;
 
 import org.javaboy.vhr.model.EmployeeExerciseSearchResult;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
 import org.javaboy.vhr.model.EmployeeExercise;
+import org.javaboy.vhr.model.Interview;
 
 
 public interface EmployeeExerciseMapper {
@@ -23,5 +25,10 @@ public interface EmployeeExerciseMapper {
     );
 
     int insertSelective(EmployeeExercise record);
+
+
+    int updateByPrimaryKeySelective(EmployeeExercise record);
+
+
 
 }
