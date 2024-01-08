@@ -28,7 +28,7 @@
     </sql>
 
     <select id="maxWorkID" resultType="java.lang.Integer">
-        select max(workID) from interview
+        select max(ID) from interview
     </select>
 
     <select id="getEmployeeByIdCard" resultMap="BaseResultMap">
