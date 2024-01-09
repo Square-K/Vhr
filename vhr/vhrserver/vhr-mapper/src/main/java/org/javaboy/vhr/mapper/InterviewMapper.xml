@@ -28,11 +28,15 @@
     </sql>
 
     <select id="maxWorkID" resultType="java.lang.Integer">
-        select max(ID) from interview
+        select max(workID) from interview
     </select>
 
     <select id="getEmployeeByIdCard" resultMap="BaseResultMap">
         select * from employee  where idCard = #{idCard}
+    </select>
+
+    <select id="getEmployeeByPhone" resultMap="BaseResultMap">
+        select * from interview  where phone = #{phone}
     </select>
 
     <select id="getEmployeeById" resultMap="BaseResultMap">

@@ -50,7 +50,7 @@ public class InterviewService {
     public Integer addEmp(Interview employee) {
         int result = interviewMapper.insertSelective(employee);
         if (result == 1) {
-            Interview emp = interviewMapper.getEmployeeById(employee.getId());
+            Interview emp = interviewMapper.getEmployeeByIdCard(employee.getIdCard());
             //生成消息的唯一id
             String msgId = UUID.randomUUID().toString();
             MailSendLog mailSendLog = new MailSendLog();
@@ -65,6 +65,29 @@ public class InterviewService {
         }
         return result;
     }
+
+    public Interview addEmp2(Interview employee) {
+        int result = interviewMapper.insertSelective(employee);
+        if (result == 1) {
+            Interview emp = interviewMapper.getEmployeeByPhone(employee.getPhone());
+            // 生成消息的唯一id
+            String msgId = UUID.randomUUID().toString();
+            MailSendLog mailSendLog = new MailSendLog();
+            mailSendLog.setMsgId(msgId);
+            mailSendLog.setCreateTime(new Date());
+            mailSendLog.setExchange(MailConstants.MAIL_EXCHANGE_NAME);
+            mailSendLog.setRouteKey(MailConstants.MAIL_ROUTING_KEY_NAME);
+            mailSendLog.setEmpId(emp.getId());
+            mailSendLog.setTryTime(new Date(System.currentTimeMillis() + 1000 * 60 * MailConstants.MSG_TIMEOUT));
+            mailSendLogService.insert(mailSendLog);
+            rabbitTemplate.convertAndSend(MailConstants.MAIL_EXCHANGE_NAME, MailConstants.MAIL_ROUTING_KEY_NAME, emp, new CorrelationData(msgId));
+
+            // 返回插入的面试信息对象
+            return emp;
+        }
+        return null; // 或者抛出异常，表示插入失败
+    }
+
 
     public Integer maxWorkID() {
         return interviewMapper.maxWorkID();

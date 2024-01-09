@@ -30,7 +30,11 @@ public interface InterviewMapper {
 
     Interview getEmployeeById(Integer id);
 
+
+
     Interview getEmployeeByIdCard(String idCard);
+
+    Interview getEmployeeByPhone(String phone);
 
     List<Interview> getEmployeeByPageWithSalary(@Param("page") Integer page, @Param("size") Integer size);
 
