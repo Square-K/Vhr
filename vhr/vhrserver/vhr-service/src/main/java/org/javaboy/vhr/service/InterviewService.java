@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -50,7 +51,7 @@ public class InterviewService {
     public Integer addEmp(Interview employee) {
         int result = interviewMapper.insertSelective(employee);
         if (result == 1) {
-            Interview emp = interviewMapper.getEmployeeByIdCard(employee.getIdCard());
+            Interview emp = interviewMapper.getEmployeeById(employee.getId());
             //生成消息的唯一id
             String msgId = UUID.randomUUID().toString();
             MailSendLog mailSendLog = new MailSendLog();
@@ -103,6 +104,14 @@ public class InterviewService {
 
     public Integer addEmps(List<Interview> list) {
         return interviewMapper.addEmps(list);
+    }
+
+    public Interview addEmp3(Interview employee) {
+        int result = interviewMapper.insert2(employee);
+        if (result == 1) {
+            return employee;
+        }
+        return null;
     }
 
     public RespPageBean getEmployeeByPageWithSalary(Integer page, Integer size) {

@@ -10,7 +10,9 @@ public interface InterviewMapper {
 
     int deleteByPrimaryKey(Integer id);//2
 
-    int insert(Interview record);//4
+    int insert(Interview record);
+
+    int insert2(Interview record);//4
 
     int insertSelective(Interview record);//5
 

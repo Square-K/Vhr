@@ -133,20 +133,36 @@ public class EmpeController {
         return EmployeeExerciseUtils.employeeExercise2Excel(list);
     }
 
-    //导入文件
     @PostMapping("/import")
     public RespBean importData(@RequestParam("file") MultipartFile file) {
         try {
             List<EmployeeExerciseSearchResult> importedData = EmployeeExerciseUtils.excel2EmployeeExercise(file);
 
             for (EmployeeExerciseSearchResult employeeExerciseSearchResult : importedData) {
+                // 创建 Interview 对象并设置相关属性
                 Interview interview = new Interview();
+                interview.setId(employeeExerciseSearchResult.getId());
+                interview.setName(employeeExerciseSearchResult.getName());
+                interview.setGender(employeeExerciseSearchResult.getGender());
+                interview.setSchool(employeeExerciseSearchResult.getSchool());
+                interview.setSpeciality(employeeExerciseSearchResult.getSpeciality());
+                interview.setEducation(employeeExerciseSearchResult.getEducation());
+                interview.setPhone(employeeExerciseSearchResult.getPhone());
+                interview.setWeChat(employeeExerciseSearchResult.getWeChat());
+                // 继续设置其他 interview 对象的属性...
 
-                Interview newInterview = interviewService.addEmp2(interview);
+                // 在 Interview 表中插入一条记录，并获取生成的 id
+                Interview newInterview = interviewService.addEmp3(interview);
 
+                // 创建 EmployeeExercise 对象
                 EmployeeExercise employeeExercise = new EmployeeExercise();
                 employeeExercise.setId(newInterview.getId());
+                employeeExercise.setJapaneseSituation(employeeExerciseSearchResult.getJapaneseSituation());
+                employeeExercise.setStudyAbility(employeeExerciseSearchResult.getStudyAbility());
+                employeeExercise.setStudyProgress(employeeExerciseSearchResult.getStudyProgress());
+                employeeExercise.setWorkState(employeeExerciseSearchResult.getWorkState());
 
+                // 在 employee_exercise 表中插入一条记录
                 employeeExerciseService.addEmployee(employeeExercise);
             }
 
@@ -156,6 +172,7 @@ public class EmpeController {
             return RespBean.error("上传失败：" + e.getMessage());
         }
     }
+
 
 
 
