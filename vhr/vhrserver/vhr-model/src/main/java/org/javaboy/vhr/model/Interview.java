@@ -12,6 +12,13 @@ public class Interview implements Serializable {
 
     private String gender;
 
+    public Interview(String name, String gender, String school, String speciality, String education, String graduateDate, String idCard, String phone, String weChat, String japanese, String notes, String test_time1, String result1, String test_time2, String result2, String offer, String agreement, String beginDate) {
+    }
+
+    public Interview() {
+
+    }
+
     @Override
     public String toString() {
         return "Employee{" +

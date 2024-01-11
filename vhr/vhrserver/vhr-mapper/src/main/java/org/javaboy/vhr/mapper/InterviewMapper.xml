@@ -28,11 +28,11 @@
     </sql>
 
     <select id="maxWorkID" resultType="java.lang.Integer">
-        select max(workID) from interview
+        select max(id) from interview
     </select>
 
     <select id="getEmployeeByIdCard" resultMap="BaseResultMap">
-        select * from employee  where idCard = #{idCard}
+        select * from interview  where idCard = #{idCard}
     </select>
 
     <select id="getEmployeeByPhone" resultMap="BaseResultMap">
@@ -106,8 +106,8 @@
 
     <insert id="addEmps">
     insert into interview (name, gender, school, speciality, education, graduateDate,
-    idCard,phone,weChat,japanese,notes,test_time1,result1,
-    test_time2,result2,offer,agreement,beginDate)
+                           idCard,phone,weChat,japanese,notes,test_time1,result1,
+                           test_time2,result2,offer,agreement,beginDate)
     values
     <foreach collection="list" separator="," item="emp">
     (#{emp.name,jdbcType=VARCHAR}, #{emp.gender,jdbcType=CHAR},
@@ -325,8 +325,9 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.Interview">
         update interview
-        set name = #{name,jdbcType=VARCHAR},
-          gender = #{gender,jdbcType=CHAR},
+        <set>
+            name = #{name,jdbcType=VARCHAR},
+            gender = #{gender,jdbcType=CHAR},
             school = #{school,jdbcType=VARCHAR},
             speciality = #{speciality,jdbcType=VARCHAR},
             education = #{education,jdbcType=VARCHAR},
@@ -343,6 +344,7 @@
             offer = #{offer,jdbcType=VARCHAR},
             agreement = #{agreement,jdbcType=VARCHAR},
             beginDate = #{beginDate,jdbcType=DATE},
+        </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>
