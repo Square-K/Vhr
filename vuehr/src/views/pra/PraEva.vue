@@ -286,12 +286,7 @@ export default {
             if (this.isValidDateFormat(row.day)) {
               //进行lessonName验证
               if (this.lessonNames.includes(row.lessonName)) {
-                if('T' === row.status || 'F' === row.status){
-                  editedRows.push(row);
-                }else {
-                  //状态不符合T或F情况
-                  this.tOrF()
-                }
+                editedRows.push(row);
               } else {
                 // 处理lessonName不在lessonNames数组中的情况
                 this.leNameAlert()
@@ -333,18 +328,6 @@ export default {
           .catch(error => {
             console.error('Error saving data:', error);
           });
-    },
-    /** 状态内容错误提示*/
-    tOrF() {
-      this.$alert('状态内容必须输入T或者F！', '状态', {
-        confirmButtonText: '确定',
-        callback: action => {
-          this.$message({
-            type: 'info',
-            message: `action: ${ action }`
-          });
-        }
-      });
     },
     /** 课程名错误提示*/
     leNameAlert() {
