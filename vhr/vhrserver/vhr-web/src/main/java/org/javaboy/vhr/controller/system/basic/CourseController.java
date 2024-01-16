@@ -52,18 +52,61 @@ public class CourseController {
         JSONObject jsonObject3 =new JSONObject();
         JSONObject jsonObject4 =new JSONObject();
         JSONObject jsonObject5 =new JSONObject();
+        JSONObject jsonObject6 =new JSONObject();
+        JSONObject jsonObject7 =new JSONObject();
+        JSONObject jsonObject8 =new JSONObject();
+        JSONObject jsonObject9 =new JSONObject();
+        JSONObject jsonObject10 =new JSONObject();
+        JSONObject jsonObject11 =new JSONObject();
+        JSONObject jsonObject12 =new JSONObject();
+        JSONObject jsonObject13 =new JSONObject();
+        JSONObject jsonObject14 =new JSONObject();
+        JSONObject jsonObject15 =new JSONObject();
+        JSONObject jsonObject16 =new JSONObject();
+        JSONObject jsonObject17 =new JSONObject();
+        JSONObject jsonObject18 =new JSONObject();
+
+
         //以键值对的形式存储节数
-        jsonObject1.set("section",JSONUtil.parseObj("{\"num\":\"第一大节\",\"time\":\"8:00-9:40\"}"));
-        jsonObject2.set("section",JSONUtil.parseObj("{\"num\":\"第二大节\",\"time\":\"10:00-11:40\"}"));
-        jsonObject3.set("section",JSONUtil.parseObj("{\"num\":\"第三大节\",\"time\":\"14:00-15:40\"}"));
-        jsonObject4.set("section",JSONUtil.parseObj("{\"num\":\"第四大节\",\"time\":\"16:00-17:40\"}"));
-        jsonObject5.set("section",JSONUtil.parseObj("{\"num\":\"第五大节\",\"time\":\"19:00-20:40\"}"));
+        jsonObject1.set("section",JSONUtil.parseObj("{\"num\":\"第一周\",\"time\":\"9:00-18:00\"}"));
+        jsonObject2.set("section",JSONUtil.parseObj("{\"num\":\"第二周\",\"time\":\"9:00-18:00\"}"));
+        jsonObject3.set("section",JSONUtil.parseObj("{\"num\":\"第三周\",\"time\":\"9:00-18:00\"}"));
+        jsonObject4.set("section",JSONUtil.parseObj("{\"num\":\"第四周\",\"time\":\"9:00-18:00\"}"));
+        jsonObject5.set("section",JSONUtil.parseObj("{\"num\":\"第五周\",\"time\":\"9:00-18:00\"}"));
+        jsonObject6.set("section",JSONUtil.parseObj("{\"num\":\"第六周\",\"time\":\"9:00-18:00\"}"));
+        jsonObject7.set("section",JSONUtil.parseObj("{\"num\":\"第七周\",\"time\":\"9:00-18:00\"}"));
+        jsonObject8.set("section",JSONUtil.parseObj("{\"num\":\"第八周\",\"time\":\"9:00-18:00\"}"));
+        jsonObject9.set("section",JSONUtil.parseObj("{\"num\":\"第九周\",\"time\":\"9:00-18:00\"}"));
+        jsonObject10.set("section",JSONUtil.parseObj("{\"num\":\"第十周\",\"time\":\"9:00-18:00\"}"));
+        jsonObject11.set("section",JSONUtil.parseObj("{\"num\":\"第十一周\",\"time\":\"9:00-18:00\"}"));
+        jsonObject12.set("section",JSONUtil.parseObj("{\"num\":\"第十二周\",\"time\":\"9:00-18:00\"}"));
+        jsonObject13.set("section",JSONUtil.parseObj("{\"num\":\"第十三周\",\"time\":\"9:00-18:00\"}"));
+        jsonObject14.set("section",JSONUtil.parseObj("{\"num\":\"第十四周\",\"time\":\"9:00-18:00\"}"));
+        jsonObject15.set("section",JSONUtil.parseObj("{\"num\":\"第十五周\",\"time\":\"9:00-18:00\"}"));
+        jsonObject16.set("section",JSONUtil.parseObj("{\"num\":\"第十六周\",\"time\":\"9:00-18:00\"}"));
+        jsonObject17.set("section",JSONUtil.parseObj("{\"num\":\"第十七周\",\"time\":\"9:00-18:00\"}"));
+        jsonObject18.set("section",JSONUtil.parseObj("{\"num\":\"第十八周\",\"time\":\"9:00-18:00\"}"));
+
         //将对象都加入到jsonobject集合中
         list.add(jsonObject1);
         list.add(jsonObject2);
         list.add(jsonObject3);
         list.add(jsonObject4);
         list.add(jsonObject5);
+        list.add(jsonObject6);
+        list.add(jsonObject7);
+        list.add(jsonObject8);
+        list.add(jsonObject9);
+        list.add(jsonObject10);
+        list.add(jsonObject11);
+        list.add(jsonObject12);
+        list.add(jsonObject13);
+        list.add(jsonObject14);
+        list.add(jsonObject15);
+        list.add(jsonObject16);
+        list.add(jsonObject17);
+        list.add(jsonObject18);
+
         //循环courselist集合
         courseList.forEach(course -> {
             //从course对象获取星期和节数
@@ -85,6 +128,45 @@ public class CourseController {
                     break;
                 case "五":
                     setJson(week,course,jsonObject5);
+                    break;
+                case "六":
+                    setJson(week,course,jsonObject6);
+                    break;
+                case "七":
+                    setJson(week,course,jsonObject7);
+                    break;
+                case "八":
+                    setJson(week,course,jsonObject8);
+                    break;
+                case "九":
+                    setJson(week,course,jsonObject9);
+                    break;
+                case "十":
+                    setJson(week,course,jsonObject10);
+                    break;
+                case "十一":
+                    setJson(week,course,jsonObject11);
+                    break;
+                case "十二":
+                    setJson(week,course,jsonObject12);
+                    break;
+                case "十三":
+                    setJson(week,course,jsonObject13);
+                    break;
+                case "十四":
+                    setJson(week,course,jsonObject14);
+                    break;
+                case "十五":
+                    setJson(week,course,jsonObject15);
+                    break;
+                case "十六":
+                    setJson(week,course,jsonObject16);
+                    break;
+                case "十七":
+                    setJson(week,course,jsonObject17);
+                    break;
+                case "十八":
+                    setJson(week,course,jsonObject18);
                     break;
             }
         });
