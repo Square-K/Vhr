@@ -32,7 +32,7 @@
           type="primary"
           style="margin: 5px;width: 120px"
           @click="handleButtonClick(buttonId);updatelastWeekNum(buttonId)">
-        第{{ buttonId }}周课表
+        第{{ buttonId }}期课表
       </el-button>
     </div>
 
@@ -45,7 +45,7 @@
                 @cell-mouse-enter="handleCellEnter"
                 @cell-mouse-leave="handleCellLeave"
                 @cell-click="handleCellClick">
-        <el-table-column label="时间/课程">
+        <el-table-column label="周期/课程">
           <template v-slot="scope">
             <div v-if="scope.row.section">
               <div style="margin: 10px 0">{{scope.row.section.num}}</div>
