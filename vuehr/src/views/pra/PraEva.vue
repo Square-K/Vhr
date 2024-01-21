@@ -32,12 +32,13 @@
           :id="buttonId"
           type="primary"
           style="margin: 5px;width: 120px"
-          @click="handleButtonClick(buttonId);updateLastEpNum(buttonId)">
+          @click="handleButtonClick(buttonId);updateLastPeriod(buttonId)">
         第{{ buttonId }}期实训成绩表
       </el-button>
     </div>
     <!--表格-->
     <el-table
+        class="scrollable-tabs"
         :data="tableData"
         size="mini"
         stripe
@@ -53,46 +54,55 @@
           type="selection"
           width="55">
       </el-table-column>
-      <el-table-column label="id" prop="id" width="180" v-if="false">
+      <el-table-column label="sid" prop="sid" width="110" v-if="false">
         <div class="item" slot-scope="scope">
-          <el-input class="item__input" v-model="scope.row.id" placeholder="请输入内容"></el-input>
+          <el-input class="item__input" v-model="scope.row.sid" placeholder="请输入内容"></el-input>
           <div class="item__txt">{{scope.row.id}}</div>
         </div>
       </el-table-column>
       <el-table-column
-          prop="day"
-          label="日期"
-          width="180">
-        <div class="item" slot-scope="scope">
-          <el-input class="item__input" v-model="scope.row.day" placeholder="请输入内容"></el-input>
-          <div class="item__txt">{{scope.row.day}}</div>
-        </div>
-      </el-table-column>
-      <el-table-column
-          prop="lessonName"
-          label="课程名"
-          width="180">
-        <div class="item" slot-scope="scope">
-          <el-input class="item__input" v-model="scope.row.lessonName" placeholder="请输入内容"></el-input>
-          <div class="item__txt">{{scope.row.lessonName}}</div>
-        </div>
-      </el-table-column>
-      <el-table-column
+          fixed
           prop="name"
           label="姓名"
-          width="180">
-        <div class="item" slot-scope="scope">
-          <el-input class="item__input" v-model="scope.row.name" placeholder="请输入内容"></el-input>
-          <div class="item__txt">{{scope.row.name}}</div>
+          width="110">
+        <div slot-scope="scope">
+          <div>{{scope.row.name}}</div>
         </div>
       </el-table-column>
       <el-table-column
-          prop="score"
-          label="成绩"
-          width="180">
+          v-for="(item,index) in lessonNames"
+          :key="index"
+          :label="item"
+          :prop="item"
+          width="110">
         <div class="item" slot-scope="scope">
-          <el-input class="item__input" v-model="scope.row.score" placeholder="请输入内容"></el-input>
-          <div class="item__txt">{{scope.row.score}}</div>
+          <el-input class="item__input" v-model="scope.row.scores[index].score" v-if="scope.row.scores && scope.row.scores[index]" placeholder="请输入内容"></el-input>
+          <div class="item__txt" v-if="scope.row.scores && scope.row.scores[index]">
+            {{ scope.row.scores[index].score }}
+          </div>
+        </div>
+      </el-table-column>
+      <el-table-column
+          sortable
+          fixed="right"
+          prop="sum"
+          label="总分"
+          width="110">
+        <div slot-scope="scope">
+          <div v-if="scope.row.sumAndAvg.length > 0">
+            {{ scope.row.sumAndAvg[0] }}
+          </div>
+        </div>
+      </el-table-column>
+      <el-table-column
+          fixed="right"
+          label="平均分"
+          prop="avg"
+          width="110">
+        <div slot-scope="scope">
+          <div v-if="scope.row.sumAndAvg.length > 0">
+            {{ scope.row.sumAndAvg[1] }}
+          </div>
         </div>
       </el-table-column>
     </el-table>
@@ -101,7 +111,7 @@
 </template>
 
 <script>
-import {postRequest} from "@/utils/api";
+import {getRequest, postRequest} from "@/utils/api";
 import { Message } from "element-ui";
 
 export default {
@@ -111,38 +121,45 @@ export default {
       buttonIds: [],
       //表格数据
       tableData: [{
-        id: 1,
-        epNum: 1,
-        day: '2023-05-02',
-        lessonName: 'html',
-        name: '张三',
-        score: '0',
-        leOrder: 1
+        name: '',
+        period : 0,
+        scores: [{
+          id: 0,
+          lessonName: '',
+          lessonOrder: 0,
+          score: 0,
+          sid: 0
+        }],
+        sumAndAvg: [{
+          sum: 0,
+          avg: 0
+        }],
       }],
       loading: false,
       // 需要编辑的属性
-      editProp: ['day','lessonName','name','score'],
+      editProp: ['score'],
       // 保存进入编辑的cell
       clickCellMap: {},
       // 存储课程名数据
-      //1.html 2.sql 3.java基础 4.js 5.java高级  6. hibernate7.struts 8.spring 9.ssh整合 10.mybatis  11.springmvc  12.ssm整合 13.bootstrap
-      lessonNames: ['html','sql','java基础','js','java高级','hibernate','struts','spring','ssh整合','mybatis','springmvc','ssm整合','bootstrap'],
-      //期数按钮被点击最后一次的期数epNum
-      lastEpNum: 1,
+      lessonNames: ['HTML笔试','HTML机试','SQL笔试','SQL机试','Java基础笔试','Java基础机试','js笔试','js机试','Java高级笔试','Java高级机试','Hibernate笔试','Hibernate机试','Struts笔试','Struts机试','Spring笔试','Spring机试','SSH整合笔试','SSH整合机试','Mybatis笔试','Mybatis机试','SpringMVC笔试','SpringMVC机试','SSM整合笔试','SSM整合机试','Bootstrap笔试','Bootstrap机试'],
+      //期数按钮被点击最后一次的期数Period
+      lastPeriod: 1,
       //被选中id集合
       selectedIds: [],
       importDataDisabled: false,
       //导入按钮文本
       importDataBtnText: '导入实训表',
       //导入按钮icon样式
-      importDataBtnIcon: 'el-icon-download'
+      importDataBtnIcon: 'el-icon-download',
+      // 保存row信息
+      editedRows:[],
 
     }
   },
   mounted() {
-    this.selectMinEpNum();
-    this.selectAllEpNums();
-    this.scoreByMinEpNum();
+    this.selectMinPeriod();
+    this.selectAllPeriod();
+    this.scoreByMinPeriod();
   },
   computed: {
     foodLabel () {
@@ -151,41 +168,56 @@ export default {
       }
     },
     uploadAction() {
-      return `/score/import/${this.lastEpNum}`;
+      return `/score/import`;
     },
   },
   methods: {
+    // getSumAndAvg(period) {
+    //   let url = `/score/SumAndAvg/${period}`;
+    //   this.getRequest(url).then(resp => {
+    //     // 处理响应数据
+    //     this.tableData.sumAndAvgData = resp;
+    //     console.log('Sum and Avg data:', resp);
+    //     console.log(this.tableData.sumAndAvgData);
+    //   });
+    // },
     handleStatusInput(row, event) {
       // 将用户输入映射为 0 或 1
       row.status = event.target.value.toUpperCase() === 'T' ? 1 : 0;
     },
-    /** 鼠标移入cell */
-    handleCellEnter (row, column, cell, event) {
-      const property = column.property
-      if (property === 'day' || property === 'lessonName' || property === 'name' || property === 'score') {
-        cell.querySelector('.item__txt').classList.add('item__txt--hover')
+    /**
+     * 移入
+     * @param row
+     * @param column
+     * @param cell
+     * @param event
+     */
+    handleCellEnter(row, column, cell, event) {
+      const itemTxt = cell.querySelector('.item__txt');
+      if (itemTxt) {
+        itemTxt.classList.add('item__txt--hover');
       }
     },
-    /** 鼠标移出cell */
-    handleCellLeave (row, column, cell, event) {
-      const property = column.property
-      if (this.editProp.includes(property)) {
-        cell.querySelector('.item__txt').classList.remove('item__txt--hover')
+    /**
+     * 移出
+     * @param row
+     * @param column
+     * @param cell
+     * @param event
+     */
+    handleCellLeave(row, column, cell, event) {
+      const itemTxt = cell.querySelector('.item__txt');
+      if (itemTxt) {
+        itemTxt.classList.remove('item__txt--hover');
       }
     },
     /** 点击cell */
     handleCellClick (row, column, cell, event) {
-      const property = column.property
-
-      if (this.editProp.includes(property)) {
-
         // 保存cell
         this.saveCellClick(row, cell)
         cell.querySelector('.item__txt').style.display = 'none'
         cell.querySelector('.item__input').style.display = 'block'
         cell.querySelector('input').focus()
-
-      }
     },
     /** 取消编辑状态 */
     cancelEditable (cell) {
@@ -194,113 +226,74 @@ export default {
     },
     /** 保存进入编辑的cell */
     saveCellClick (row, cell) {
-      const id = row.id
-      if (this.clickCellMap[id] !== undefined) {
-        if (!this.clickCellMap[id].includes(cell)) {
-          this.clickCellMap[id].push(cell)
-        }
-      } else {
-        this.clickCellMap[id] = [cell]
-      }
+      this.editedRows.push(row)
     },
     /** 保存数据 */
     save (row) {
-      const id = row.id
+      const sid = row.sid
       // 取消本行所有cell的编辑状态
-      this.clickCellMap[id].forEach(cell => {
+      this.clickCellMap[sid].forEach(cell => {
         this.cancelEditable(cell)
       })
-      this.clickCellMap[id] = []
+      this.clickCellMap[sid] = []
     },
     /** 返回最小期数 */
-    selectMinEpNum(){
+    selectMinPeriod() {
       this.loading = true;
-      let url = '/score/minEpNum';
+      let url = '/score/minPeriod';
       this.getRequest(url).then(resp => {
         this.loading = false;
         if (resp) {
-          //页面加载时lastEpNum默认是最小期数
-          this.lastEpNum = resp;
+          this.lastPeriod = resp; // 先设置 lastPeriod
         }
       });
     },
     /** 查询最小的期数，并返回该期数所有作业 */
-    scoreByMinEpNum(){
+    scoreByMinPeriod(){
       this.loading = true;
-      let url = '/score/scoreByMinEpNum';
+      let url = '/score/scoreByMinPeriod';
       this.getRequest(url).then(resp => {
         this.loading = false;
         if (resp) {
           this.tableData = resp;
+          console.log(this.tableData);
         }
       });
     },
     /** 查询所有的期数 */
-    selectAllEpNums(){
-      let url = '/score/allEpNums';
+    selectAllPeriod(){
+      let url = '/score/allPeriod';
       this.getRequest(url).then(resp => {
         if (resp) {
           this.buttonIds = resp;
         }
       });
     },
-    /** 获取lessonNames数据 */
-    // fetchLessonNames() {
-    //   let url = '/homework/getLessonNames';
-    //   this.getRequest(url).then(resp => {
-    //     if (resp) {
-    //       this.lessonNames = resp;
-    //     }
-    //   });
-    // },
     /** 点击“第几期实训表”按钮，切换界面*/
     handleButtonClick(buttonId){
+      console.log('按钮被点击:', buttonId);
       let url = '/score/'+buttonId;
       this.getRequest(url).then(resp => {
         if (resp) {
+          console.log(resp);
           this.tableData = resp;
+          //如果学生删除干净，刷新页面
+          if(this.tableData.length === 0){
+            window.location.reload();
+          }
         }
       });
+      // this.getSumAndAvg(buttonId);
     },
     /** 期数按钮被点击一次，改变期数*/
-    updateLastEpNum(buttonId){
-      this.lastEpNum=buttonId;
-    },
-    /** 验证日期格式是否符合yyyy-MM-dd */
-    isValidDateFormat(dateString) {
-      // 使用正则表达式检查日期格式
-      const dateFormatRegex = /^\d{4}-\d{2}-\d{2}$/;
-      return dateFormatRegex.test(dateString);
+    updateLastPeriod(buttonId){
+      this.lastPeriod = buttonId;
     },
     /** 保存所有被编辑行的数据 */
     saveAllEditedRows() {
-      const editedRows = [];
-
-      // 遍历clickCellMap中保存的编辑过的行的cell
-      for (const id in this.clickCellMap) {
-        if (this.clickCellMap.hasOwnProperty(id)) {
-          const row = this.tableData.find(item => item.id === Number(id));
-
-          if (row) {
-            // 日期格式验证
-            if (this.isValidDateFormat(row.day)) {
-              //进行lessonName验证
-              if (this.lessonNames.includes(row.lessonName)) {
-                editedRows.push(row);
-              } else {
-                // 处理lessonName不在lessonNames数组中的情况
-                this.leNameAlert()
-              }
-            } else {
-              // 处理日期格式不符合要求的情况
-              this.dateAlert()
-            }
-          }
-        }
-      }
-
       // 发送保存数据的请求
-      this.saveDataToBackend(editedRows);
+      this.saveDataToBackend(this.editedRows);
+      console.log(this.editedRows);
     },
     /** 发送保存数据的请求到后端 */
     saveDataToBackend(editedRows) {
@@ -309,14 +302,15 @@ export default {
           .then(response => {
             console.log('Data saved successfully:', response.data);
             // 刷新页面数据
-            this.handleButtonClick(this.lastEpNum);
+            this.$alert('更新成功！', '', {
+              confirmButtonText: '确定',
+            });
+            this.handleButtonClick(this.lastPeriod);
             //取消编辑框
-            for (const id of Object.keys(this.clickCellMap)) {
-              const row = this.tableData.find(item => item.id === Number(id));
-
+            for (const sid of Object.keys(this.clickCellMap)) {
+              const row = this.tableData.find(item => item.sid === Number(sid));
               if (row) {
-                const editedCells = this.clickCellMap[id];
-
+                const editedCells = this.clickCellMap[sid];
                 // 对每个编辑状态进行处理
                 for (const cell of editedCells) {
                   // 处理每个编辑状态
@@ -328,30 +322,6 @@ export default {
           .catch(error => {
             console.error('Error saving data:', error);
           });
-    },
-    /** 课程名错误提示*/
-    leNameAlert() {
-      this.$alert('课程名不符合要求，请重新编写！', '课程名', {
-        confirmButtonText: '确定',
-        callback: action => {
-          this.$message({
-            type: 'info',
-            message: `action: ${ action }`
-          });
-        }
-      });
-    },
-    /** 日期格式错误提示*/
-    dateAlert() {
-      this.$alert('日期格式不符合要求，请重新编写！格式例：2023-12-23', '日期', {
-        confirmButtonText: '确定',
-        callback: action => {
-          this.$message({
-            type: 'info',
-            message: `action: ${ action }`
-          });
-        }
-      });
     },
     /** 删除成功提示*/
     deleSuccess() {
@@ -368,7 +338,7 @@ export default {
     /** 处理选择变化事件 */
     handleSelectionChange(selection) {
       // 获取被选中行的id数组
-      this.selectedIds = selection.map(item => item.id);
+      this.selectedIds = selection.map(item => item.sid);
     },
     /** 删除多个实训表 */
     deleteHomeWorks(){
@@ -376,7 +346,7 @@ export default {
       this.postRequest(url, this.selectedIds)
           .then(response => {
             // 刷新页面数据
-            this.handleButtonClick(this.lastEpNum);
+            this.handleButtonClick(this.lastPeriod);
             this.deleSuccess()
           })
           .catch(error => {
@@ -384,18 +354,22 @@ export default {
           });
     },
     exportData() {
-      window.open('/score/export/'+this.lastEpNum, '_parent');
+      window.open('/score/export/'+this.lastPeriod, '_parent');
     },
     beforeUpload() {
       this.importDataBtnText = '正在导入';
       this.importDataBtnIcon = 'el-icon-loading';
       this.importDataDisabled = true;
+      this.$alert('更新成功！', '', {
+        confirmButtonText: '确定',
+      });
+      this.handleButtonClick(this.lastPeriod);
     },
     onSuccess(response, file, fileList) {
       this.importDataBtnText = '导入实训表';
       this.importDataBtnIcon = 'el-icon-download';
       this.importDataDisabled = false;
-      this.handleButtonClick(this.lastEpNum);
+      this.handleButtonClick(this.lastPeriod);
     },
     onError(err, file, fileList) {
       this.importDataBtnText = '导入实训表';

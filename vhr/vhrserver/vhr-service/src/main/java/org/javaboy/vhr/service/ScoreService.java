@@ -2,11 +2,11 @@ package org.javaboy.vhr.service;
 
 import org.javaboy.vhr.mapper.ScoreMapper;
 import org.javaboy.vhr.model.Score;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.javaboy.vhr.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,76 +18,99 @@ public class ScoreService {
 
     @Autowired
     ScoreMapper scoreMapper;
-    //打印日志
-    public final static Logger logger = LoggerFactory.getLogger(InterviewService.class);
 
-    public List<Score> getScoreByEpNum(Integer epNum){
-        return scoreMapper.getScoreByEpNum(epNum);
+    /**
+     * 根据期数获取实训成绩列表
+     * @param period
+     * @return
+     */
+    public List<Student> getScoreByPeriod(Integer period){
+        return scoreMapper.getScoreByPeriod(period);
     }
 
-    public Integer getMinEpNum(){
-        return scoreMapper.getMinEpNum();
+    /**
+     * 根据期数获取sid
+     * @param period
+     * @return
+     */
+    public List<Integer> getSidByPeriod(Integer period){
+        return scoreMapper.getSidByPeriod(period);
     }
 
-    public List<Integer> getAllEpNums(){
-        return scoreMapper.getAllEpNums();
+
+    /**
+     * 获取总分和平均分
+     * @return
+     */
+    public List<Double> getSumAndAvg(Integer sid){
+        List<Double> list = new ArrayList<>();
+        list.add(scoreMapper.getSum(sid));
+        list.add(scoreMapper.getAvg(sid));
+        return list;
     }
 
-    public List<String> getLessonNames(){
-        return scoreMapper.getLessonNames();
+    /**
+     * 获取最小期数
+     */
+    public Integer getMinPeriod(){
+        return scoreMapper.getMinPeriod();
     }
 
-    public void saveScore(List<Score> editedRows) {
-        for (Score s : editedRows) {
-            //修改课程等级
-            s.setLeOrder(updateLeOrder(s.getLessonName()));
-            boolean b = scoreMapper.updateScore(s);
+    /**
+     * 获取全部期数
+     */
+    public List<Integer> getAllPeriod(){
+        return scoreMapper.getAllPeriod();
+    }
 
+    /**
+     * 根据学生id修改成绩
+     * @param editedRows
+     */
+    public boolean saveScore(List<Student> editedRows) {
+        int success = 0;
+        List<Score> scoreList = new ArrayList<>();
+        for (Student student : editedRows) {
+            scoreList = student.getScores();
+            for (Score score : scoreList) {
+                scoreMapper.updateScore(score.getId(), score.getScore());
+            }
+            success = 1;
         }
-    }
-    //根据课程名设置课程等级
-    public Integer updateLeOrder(String lessonName){
-        //1.html 2.sql 3.java基础 4.js 5.java高级  6. hibernate7.struts 8.spring 9.ssh整合 10.mybatis  11.springmvc  12.ssm整合 13.bootstrap
-        Integer leOrder = 0;
-        if ("html".equals(lessonName)){
-            leOrder=1;
-        } else if ("sql".equals(lessonName)) {
-            leOrder=2;
-        }else if ("java基础".equals(lessonName)) {
-            leOrder=3;
-        }else if ("js".equals(lessonName)) {
-            leOrder=4;
-        }else if ("java高级".equals(lessonName)) {
-            leOrder=5;
-        }else if ("hibernate".equals(lessonName)) {
-            leOrder=6;
-        }else if ("struts".equals(lessonName)) {
-            leOrder=7;
-        }else if ("spring".equals(lessonName)) {
-            leOrder=8;
-        }else if ("ssh整合".equals(lessonName)) {
-            leOrder=9;
-        }else if ("mybatis".equals(lessonName)) {
-            leOrder=10;
-        }else if ("springmvc".equals(lessonName)) {
-            leOrder=11;
-        }else if ("ssm整合".equals(lessonName)) {
-            leOrder=12;
-        }else if ("bootstrap".equals(lessonName)) {
-            leOrder=13;
-        }
-        return leOrder;
+        return success == 1;
     }
 
-    public void deleteScore(Integer[] ids){
-        scoreMapper.deleteScore(ids);
+    /**
+     * 删除学生和成绩
+     * @param ids
+     */
+    public boolean deleteScoreAndStudent(Integer[] ids){
+        int success = 0;
+        scoreMapper.deleteStudent(ids);
+        for (Integer a : ids){
+            scoreMapper.deleteScore(a);
+            success = 1;
+        }
+        return success == 1;
     }
 
-    public Integer addScore(List<Score> list, Integer epNum) {
-        for (Score s : list) {
-            s.setEpNum(epNum);
-            s.setLeOrder(updateLeOrder(s.getLessonName()));
-        }
-        return scoreMapper.addScore(list);
+    /**
+     * 上传学生成绩
+     * @return
+     */
+    public void addStudent(Student student) {
+        Integer sid = student.getSid();
+        String name = student.getName();
+        Integer period = student.getPeriod();
+        scoreMapper.addStudent(sid, name, period);
     }
+
+    /**
+     * 上传学生成绩
+     * @return
+     */
+    public void addScore(List<Score> list) {
+        scoreMapper.addScore(list);
+    }
+
 }

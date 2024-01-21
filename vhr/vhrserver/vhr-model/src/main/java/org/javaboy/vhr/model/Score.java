@@ -1,9 +1,6 @@
 package org.javaboy.vhr.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @author 张睿
@@ -16,31 +13,24 @@ public class Score implements Serializable {
 
     //自增id
     private Integer id;
-    //期数
-    private Integer epNum;
-    //日期@DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "Asia/Shanghai")
-    private Date day;
-    //课程名
+
+    private Integer sid;
+
     private String lessonName;
-    //姓名
-    private String name;
-    //成绩
-    private String score;
-    //课程顺序
-    private Integer leOrder;
+
+    private Integer score;
+
+    private Integer lessonOrder;
 
     public Score() {
     }
 
-    public Score(Integer id, Integer epNum, Date day, String lessonName, String name, String score, Integer leOrder) {
+    public Score(Integer id, Integer sid, String lessonName, Integer score, Integer lessonOrder) {
         this.id = id;
-        this.epNum = epNum;
-        this.day = day;
+        this.sid = sid;
         this.lessonName = lessonName;
-        this.name = name;
         this.score = score;
-        this.leOrder = leOrder;
+        this.lessonOrder = lessonOrder;
     }
 
     public Integer getId() {
@@ -51,20 +41,12 @@ public class Score implements Serializable {
         this.id = id;
     }
 
-    public Integer getEpNum() {
-        return epNum;
+    public Integer getSid() {
+        return sid;
     }
 
-    public void setEpNum(Integer epNum) {
-        this.epNum = epNum;
-    }
-
-    public Date getDay() {
-        return day;
-    }
-
-    public void setDay(Date day) {
-        this.day = day;
+    public void setSid(Integer sid) {
+        this.sid = sid;
     }
 
     public String getLessonName() {
@@ -75,40 +57,30 @@ public class Score implements Serializable {
         this.lessonName = lessonName;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getScore() {
+    public Integer getScore() {
         return score;
     }
 
-    public void setScore(String score) {
+    public void setScore(Integer score) {
         this.score = score;
     }
 
-    public Integer getLeOrder() {
-        return leOrder;
+    public Integer getLessonOrder() {
+        return lessonOrder;
     }
 
-    public void setLeOrder(Integer leOrder) {
-        this.leOrder = leOrder;
+    public void setLessonOrder(Integer lessonOrder) {
+        this.lessonOrder = lessonOrder;
     }
 
     @Override
     public String toString() {
         return "Score{" +
                 "id=" + id +
-                ", epNum=" + epNum +
-                ", day=" + day +
+                ", sid=" + sid +
                 ", lessonName='" + lessonName + '\'' +
-                ", name='" + name + '\'' +
                 ", score=" + score +
-                ", leOrder=" + leOrder +
+                ", lessonOrder=" + lessonOrder +
                 '}';
     }
 
